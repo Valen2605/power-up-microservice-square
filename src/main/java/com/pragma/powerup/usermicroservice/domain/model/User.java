@@ -1,11 +1,13 @@
 package com.pragma.powerup.usermicroservice.domain.model;
 
+import javax.management.relation.Role;
+
 public class User {
     private Long id;
-    private Person person;
+    private Restaurant person;
     private Role role;
 
-    public User(Long id, Person person, Role role) {
+    public User(Long id, Restaurant person, Role role) {
         this.id = id;
         this.person = person;
         this.role = role;
@@ -19,11 +21,11 @@ public class User {
         this.id = id;
     }
 
-    public Person getPerson() {
+    public Restaurant getPerson() {
         return person;
     }
 
-    public void setPerson(Person person) {
+    public void setPerson(Restaurant person) {
         this.person = person;
     }
 
