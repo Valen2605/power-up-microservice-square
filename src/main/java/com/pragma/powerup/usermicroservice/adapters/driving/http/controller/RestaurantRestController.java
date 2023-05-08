@@ -26,5 +26,17 @@ public class RestaurantRestController {
 
     private final IRestaurantHandler restaurantHandler;
 
-
+    @Operation(summary = "Add a new restaurant",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Restaurant created",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "409", description = "Restaurant already exists",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
+            })
+    @PostMapping("/createRestaurant")
+    public ResponseEntity<Map<String, String>> saveRestaurant(@Valid @RequestBody RestaurantRequestDto restaurantRequestDto){
+        restaurantHandler.saveRestaurant(restaurantRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.RESTAURANT_CREATED_MESSAGE));
+    }
 }

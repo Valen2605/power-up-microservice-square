@@ -1,16 +1,32 @@
 package com.pragma.powerup.usermicroservice.domain.model;
 
 import javax.management.relation.Role;
+import java.time.LocalDate;
 
 public class User {
     private Long id;
-    private Restaurant person;
-    private Role role;
+    private String name;
+    private String surname;
+    private String dniNumber;
+    private String phone;
+    private LocalDate birthDate;
+    private String mail;
+    private String password;
+    private Long idRole;
 
-    public User(Long id, Restaurant person, Role role) {
+    public User() {
+    }
+
+    public User(Long id,String name, String surname, String dniNumber, String phone, LocalDate birthdate, String mail, String password, Long idRole) {
         this.id = id;
-        this.person = person;
-        this.role = role;
+        this.name = name;
+        this.surname = surname;
+        this.dniNumber = dniNumber;
+        this.phone = phone;
+        this.birthDate = birthdate;
+        this.mail = mail;
+        this.password = password;
+        this.idRole = idRole;
     }
 
     public Long getId() {
@@ -21,19 +37,67 @@ public class User {
         this.id = id;
     }
 
-    public Restaurant getPerson() {
-        return person;
+    public String getName() {
+        return name;
     }
 
-    public void setPerson(Restaurant person) {
-        this.person = person;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Role getRole() {
-        return role;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getDniNumber() {
+        return dniNumber;
+    }
+
+    public void setDniNumber(String dniNumber) {
+        this.dniNumber = dniNumber;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public LocalDate getBirthdate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Long getIdRole() {
+        return idRole;
+    }
+
+    public void setIdRole(Long idRole) {
+        this.idRole = idRole;
     }
 }

@@ -3,9 +3,9 @@ package com.pragma.powerup.usermicroservice.configuration;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantAlreadyExistsException;
+import com.pragma.powerup.usermicroservice.domain.exceptions.UserNotBeAOwnerException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,12 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-
-import static com.pragma.powerup.usermicroservice.configuration.Constants.NO_DATA_FOUND_MESSAGE;
-import static com.pragma.powerup.usermicroservice.configuration.Constants.RESPONSE_ERROR_MESSAGE_KEY;
-import static com.pragma.powerup.usermicroservice.configuration.Constants.ROLE_NOT_FOUND_MESSAGE;
-import static com.pragma.powerup.usermicroservice.configuration.Constants.USER_ALREADY_EXISTS_MESSAGE;
-import static com.pragma.powerup.usermicroservice.configuration.Constants.WRONG_CREDENTIALS_MESSAGE;
+import static com.pragma.powerup.usermicroservice.configuration.Constants.*;
 
 @ControllerAdvice
 public class ControllerAdvisor {
@@ -41,12 +36,6 @@ public class ControllerAdvisor {
         return new ResponseEntity<>(errorMessages, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<Map<String, String>> handleAuthenticationException(AuthenticationException noDataFoundException) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, WRONG_CREDENTIALS_MESSAGE));
-    }
-
     @ExceptionHandler(NoDataFoundException.class)
     public ResponseEntity<Map<String, String>> handleNoDataFoundException(NoDataFoundException noDataFoundException) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -55,15 +44,21 @@ public class ControllerAdvisor {
 
     @ExceptionHandler(RestaurantAlreadyExistsException.class)
     public ResponseEntity<Map<String, String>> handleUserAlreadyExistsException(
-            RestaurantAlreadyExistsException userAlreadyExistsException) {
+            RestaurantAlreadyExistsException restaurantAlreadyExistsException) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_ALREADY_EXISTS_MESSAGE));
     }
 
     @ExceptionHandler(RestaurantNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleRoleNotFoundException(
-            RestaurantNotFoundException roleNotFoundException) {
+            RestaurantNotFoundException restaurantNotFoundException) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ROLE_NOT_FOUND_MESSAGE));
+    }
+    @ExceptionHandler(UserNotBeAOwnerException.class)
+    public ResponseEntity<Map<String, String>> handleUserNotBeAOwnerException(
+            UserNotBeAOwnerException userNotBeAOwnerException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_NOT_A_OWNER_MESSAGE));
     }
 }
