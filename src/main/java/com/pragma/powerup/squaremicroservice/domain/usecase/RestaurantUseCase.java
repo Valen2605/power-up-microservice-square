@@ -1,6 +1,6 @@
 package com.pragma.powerup.squaremicroservice.domain.usecase;
 
-import com.pragma.powerup.squaremicroservice.adapters.driving.http.controller.UserRestController;
+import com.pragma.powerup.squaremicroservice.adapters.driving.http.controller.OwnerRestController;
 import com.pragma.powerup.squaremicroservice.configuration.Constants;
 import com.pragma.powerup.squaremicroservice.domain.api.IRestaurantServicePort;
 import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotBeAOwnerException;
@@ -16,7 +16,7 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     private final IRestaurantPersistencePort restaurantPersistencePort;
 
     @Autowired
-    private UserRestController userRestController;
+    private OwnerRestController userRestController;
 
     public RestaurantUseCase(IRestaurantPersistencePort restaurantPersistencePort) {
         this.restaurantPersistencePort = restaurantPersistencePort;
@@ -26,7 +26,6 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     public void saveRestaurant(Restaurant restaurant){
         Long idOwner = restaurant.getIdOwner();
         User user = userRestController.getOwner(idOwner);
-        System.out.println(user.getId());
 
         if (user.getIdRole() != (Constants.OWNER_ROLE_ID)){
             throw new UserNotBeAOwnerException();

@@ -9,6 +9,8 @@ public class Restaurant {
     private Long idOwner;
     private String dniNumber;
 
+    public Restaurant(){}
+
     public Restaurant(Long id, String name, String address, String phone, String urlLogo, Long idOwner, String dniNumber) {
         this.id = id;
         this.name = name;

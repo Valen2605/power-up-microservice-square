@@ -7,12 +7,12 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping(value = "/getOwner")
-public class UserRestController {
+public class OwnerRestController {
 
     private final RestTemplate restTemplate;
 
     @Autowired
-    public UserRestController(RestTemplate restTemplate) {
+    public OwnerRestController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
