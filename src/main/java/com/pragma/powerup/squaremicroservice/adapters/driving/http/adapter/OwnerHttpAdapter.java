@@ -1,10 +1,7 @@
 package com.pragma.powerup.squaremicroservice.adapters.driving.http.adapter;
 
-import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotBeAOwnerException;
 import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotFoundException;
 import com.pragma.powerup.squaremicroservice.domain.model.User;
-import io.swagger.v3.oas.models.PathItem;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -20,8 +17,6 @@ import org.springframework.web.client.RestTemplate;
 public class OwnerHttpAdapter {
 
     private final RestTemplate restTemplate;
-
-    private String message;
 
     @Value("${my.variables.url}")
     String url;
