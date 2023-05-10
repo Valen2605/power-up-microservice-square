@@ -1,6 +1,7 @@
 package com.pragma.powerup.squaremicroservice.adapters.driving.http.controller;
 
 
+import com.pragma.powerup.squaremicroservice.adapters.driving.http.adapter.OwnerHttpAdapter;
 import com.pragma.powerup.squaremicroservice.domain.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,11 +20,11 @@ class OwnerRestControllerTest {
     @Mock
     private RestTemplate restTemplate;
 
-    private OwnerRestController ownerRestController;
+    private OwnerHttpAdapter ownerHttpAdapter;
 
     @BeforeEach
     public void owner() {
-        ownerRestController = new OwnerRestController(restTemplate);
+        ownerHttpAdapter = new OwnerHttpAdapter(restTemplate);
     }
 
     @Test
@@ -39,7 +40,7 @@ class OwnerRestControllerTest {
         Mockito.when(restTemplate.getForObject(url, User.class)).thenReturn(expectedUser);
 
         // Act
-        User result = ownerRestController.getOwner(id);
+        User result = ownerHttpAdapter.getOwner(id);
 
         // Assert
         assertEquals(expectedUser, result);

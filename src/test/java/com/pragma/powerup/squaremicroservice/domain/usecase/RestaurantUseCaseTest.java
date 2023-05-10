@@ -1,6 +1,6 @@
 package com.pragma.powerup.squaremicroservice.domain.usecase;
 
-import com.pragma.powerup.squaremicroservice.adapters.driving.http.controller.OwnerRestController;
+import com.pragma.powerup.squaremicroservice.adapters.driving.http.adapter.OwnerHttpAdapter;
 import com.pragma.powerup.squaremicroservice.configuration.Constants;
 import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotBeAOwnerException;
 import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
@@ -27,7 +27,7 @@ class RestaurantUseCaseTest {
     @Mock
     private IRestaurantPersistencePort restaurantPersistencePort;
     @Mock
-    private OwnerRestController ownerRestController;
+    private OwnerHttpAdapter ownerHttpAdapter;
     @InjectMocks
     private RestaurantUseCase restaurantUseCase;
 
@@ -49,7 +49,7 @@ class RestaurantUseCaseTest {
                 user.getId(), "123456");
 
 
-        Mockito.when(ownerRestController.getOwner((13L))).thenReturn(user);
+        Mockito.when(ownerHttpAdapter.getOwner((13L))).thenReturn(user);
         restaurantPersistencePort.saveRestaurant(restaurant);
 
         // Act
@@ -68,7 +68,7 @@ class RestaurantUseCaseTest {
         User user = new User();
         user.setIdRole(456L); // Valor no correspondiente a un rol
 
-        Mockito.when(ownerRestController.getOwner(123L)).thenReturn(user);
+        Mockito.when(ownerHttpAdapter.getOwner(123L)).thenReturn(user);
 
         try {
             // Act
