@@ -17,11 +17,11 @@ public class Constants {
     public static final String WRONG_CREDENTIALS_MESSAGE = "Wrong credentials";
     public static final String NO_DATA_FOUND_MESSAGE = "No data found for the requested petition";
     public static final String PERSON_ALREADY_EXISTS_MESSAGE = "A person already exists with the DNI number provided";
-    public static final String PERSON_NOT_FOUND_MESSAGE = "No person found with the id provided";
+    public static final String USER_NOT_FOUND = "User not found";
     public static final String ROLE_NOT_FOUND_MESSAGE = "No role found with the id provided";
     public static final String RESTAURANT_CREATED_MESSAGE = "Restaurant has been successfully created";
     public static final String ROLE_NOT_ALLOWED_MESSAGE = "No permission granted to create users with this role";
-    public static final String USER_ALREADY_EXISTS_MESSAGE = "A user already exists with the role provided";
+    public static final String RESTAURANT_ALREADY_EXISTS_MESSAGE = "There is already a restaurant associated with this identification number";
     public static final String USER_NOT_A_OWNER_MESSAGE = "The user is not an owner";
     public static final String SWAGGER_TITLE_MESSAGE = "User API Pragma Power Up";
     public static final String SWAGGER_DESCRIPTION_MESSAGE = "User microservice";
