@@ -33,7 +33,7 @@ class RestaurantMysqlAdapterTest {
     }
 
     @Test
-    public void saveRestaurant_shouldSaveIfNotExists() {
+    void saveRestaurant_shouldSaveIfNotExists() {
         // Arrange
         Restaurant restaurant = new Restaurant();
         restaurant.setDniNumber("123456");

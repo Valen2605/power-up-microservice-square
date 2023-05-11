@@ -19,3 +19,6 @@ management:
 my:
   variables:
     url: "http://localhost:8090/user/"
+
+
+

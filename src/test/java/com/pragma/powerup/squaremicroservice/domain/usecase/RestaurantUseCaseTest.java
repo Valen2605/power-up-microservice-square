@@ -37,7 +37,7 @@ class RestaurantUseCaseTest {
     }
 
     @Test
-    public void testSaveRestaurant() {
+    void testSaveRestaurant() {
         // Arrange
         User user = new User(13L, "Valentina", "Santa", "123456", "123456789",
                 LocalDate.of(1987, 5, 26), "valentina@email.com", "3456", Constants.OWNER_ROLE_ID);
@@ -60,7 +60,7 @@ class RestaurantUseCaseTest {
     }
 
     @Test
-    public void saveRestaurant_invalidRoleUser() {
+    void saveRestaurant_invalidRoleUser() {
         // Arrange
         Restaurant restaurant = new Restaurant();
         restaurant.setIdOwner(123L);// Id de usuario que no es propietario

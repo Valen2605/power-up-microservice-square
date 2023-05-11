@@ -1,7 +1,10 @@
 package com.pragma.powerup.squaremicroservice.domain.model;
 
+import lombok.AllArgsConstructor;
+
 import java.time.LocalDate;
 
+@AllArgsConstructor
 public class User {
     private Long id;
     private String name;
@@ -15,19 +18,6 @@ public class User {
 
     public User() {
     }
-
-    public User(Long id,String name, String surname, String dniNumber, String phone, LocalDate birthdate, String mail, String password, Long idRole) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.dniNumber = dniNumber;
-        this.phone = phone;
-        this.birthDate = birthdate;
-        this.mail = mail;
-        this.password = password;
-        this.idRole = idRole;
-    }
-
     public Long getId() {
         return id;
     }
