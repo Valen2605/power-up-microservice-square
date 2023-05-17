@@ -1,8 +1,6 @@
 package com.pragma.powerup.squaremicroservice.configuration;
 
-import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
-import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
-import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantAlreadyExistsException;
+import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.*;
 import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotBeAOwnerException;
 import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -51,10 +49,10 @@ public class ControllerAdvisor {
     }
 
     @ExceptionHandler(RestaurantNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleRoleNotFoundException(
+    public ResponseEntity<Map<String, String>> handleRestaurantNotFoundException(
             RestaurantNotFoundException restaurantNotFoundException) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ROLE_NOT_FOUND_MESSAGE));
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, RESTAURANT_NOT_FOUND_MESSAGE));
     }
     @ExceptionHandler(UserNotBeAOwnerException.class)
     public ResponseEntity<Map<String, String>> handleUserNotBeAOwnerException(
@@ -68,5 +66,12 @@ public class ControllerAdvisor {
             UserNotFoundException userNotFoundException) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_NOT_FOUND));
+    }
+
+    @ExceptionHandler(CategoryAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>> handleCategoryAlreadyExistsException(
+            CategoryAlreadyExistsException categoryAlreadyExistsException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, CATEGORY_ALREADY_EXISTS_MESSAGE));
     }
 }
