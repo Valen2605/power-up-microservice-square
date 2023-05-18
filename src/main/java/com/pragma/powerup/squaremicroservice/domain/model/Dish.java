@@ -4,23 +4,23 @@ public class Dish {
 
     private Long id;
     private String name;
-    private Long idCategory;
+    private Category category;
     private String description;
     private Integer price;
-    private Long idRestaurant;
+    private Restaurant restaurant;
     private String urlImage;
     private Boolean active;
 
     public Dish() {
     }
 
-    public Dish(Long id, String name, Long idCategory, String description, Integer price, Long idRestaurant, String urlImage, Boolean active) {
+    public Dish(Long id, String name, Category category, String description, Integer price, Restaurant restaurant, String urlImage, Boolean active) {
         this.id = id;
         this.name = name;
-        this.idCategory = idCategory;
+        this.category = category;
         this.description = description;
         this.price = price;
-        this.idRestaurant = idRestaurant;
+        this.restaurant = restaurant;
         this.urlImage = urlImage;
         this.active = active;
     }
@@ -41,12 +41,12 @@ public class Dish {
         this.name = name;
     }
 
-    public Long getIdCategory() {
-        return idCategory;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setIdCategory(Long idCategory) {
-        this.idCategory = idCategory;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getDescription() {
@@ -65,12 +65,12 @@ public class Dish {
         this.price = price;
     }
 
-    public Long getIdRestaurant() {
-        return idRestaurant;
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
-    public void setIdRestaurant(Long idRestaurant) {
-        this.idRestaurant = idRestaurant;
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
     public String getUrlImage() {

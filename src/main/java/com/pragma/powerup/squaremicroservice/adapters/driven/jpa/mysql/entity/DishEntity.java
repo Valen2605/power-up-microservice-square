@@ -29,7 +29,4 @@ public class DishEntity {
     private String urlImage;
     private Boolean active;
 
-
-
-
 }

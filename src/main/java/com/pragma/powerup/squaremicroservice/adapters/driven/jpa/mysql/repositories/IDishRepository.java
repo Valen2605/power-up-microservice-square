@@ -7,4 +7,7 @@ import java.util.List;
 
 public interface IDishRepository extends JpaRepository<DishEntity, Long> {
         List<DishEntity> findAll();
+        List<DishEntity> findAllByRestaurantEntityId(Long idRestaurant);
+
+        List<DishEntity> findAllByCategoryEntityId(Long idCategory);
 }

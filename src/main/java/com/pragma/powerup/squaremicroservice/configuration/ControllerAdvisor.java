@@ -1,8 +1,7 @@
 package com.pragma.powerup.squaremicroservice.configuration;
 
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.*;
-import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotBeAOwnerException;
-import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotFoundException;
+import com.pragma.powerup.squaremicroservice.domain.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -73,5 +72,19 @@ public class ControllerAdvisor {
             CategoryAlreadyExistsException categoryAlreadyExistsException) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, CATEGORY_ALREADY_EXISTS_MESSAGE));
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleCategoryNotFoundException(
+            CategoryNotFoundException categoryNotFoundException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, CATEGORY_NOT_FOUND_MESSAGE));
+    }
+
+    @ExceptionHandler(DishAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>> handleDishAlreadyExistsException(
+            DishAlreadyExistsException dishAlreadyExistsException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, DISH_ALREADY_EXISTS_MESSAGE));
     }
 }
