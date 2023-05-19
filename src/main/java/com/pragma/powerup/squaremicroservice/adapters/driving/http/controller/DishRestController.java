@@ -47,8 +47,8 @@ public class DishRestController {
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
             })
     @PatchMapping("/updateDish/{id}")
-    public ResponseEntity<Map<String, String>> updateDish(@PathVariable Long id, @Schema(implementation = DishUpdateRequestDto.class) @RequestBody DishRequestDto dishRequestDto) {
-        dishHandler.updateDish(id, dishRequestDto);
+    public ResponseEntity<Map<String, String>> updateDish(@PathVariable Long id, @Schema(implementation = DishUpdateRequestDto.class) @Valid @RequestBody DishUpdateRequestDto dishUpdateRequestDto) {
+        dishHandler.updateDish(id, dishUpdateRequestDto);
         return ResponseEntity.ok()
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_UPDATED_MESSAGE));
     }
