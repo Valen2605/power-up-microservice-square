@@ -21,6 +21,8 @@ public class Constants {
     public static final String CATEGORY_NOT_FOUND_MESSAGE = "No category found with the id provided";
     public static final String RESTAURANT_CREATED_MESSAGE = "Restaurant has been successfully created";
     public static final String DISH_CREATED_MESSAGE = "Dish has been successfully created";
+    public static final String DISH_UPDATED_MESSAGE = "Dish has been successfully updated";
+    public static final String DISH_NOT_FOUND_MESSAGE = "The dish you want to modify does not exist";
     public static final String CATEGORY_CREATED_MESSAGE = "Category has been successfully created";
     public static final String RESTAURANT_ALREADY_EXISTS_MESSAGE = "There is already a restaurant associated with this identification number";
     public static final String CATEGORY_ALREADY_EXISTS_MESSAGE = "There is already a category associated with this name";

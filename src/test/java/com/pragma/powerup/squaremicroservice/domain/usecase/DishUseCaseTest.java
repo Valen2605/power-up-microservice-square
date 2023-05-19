@@ -62,7 +62,19 @@ class DishUseCaseTest {
         Mockito.verify(dishPersistencePort, times(1)).saveDish(dish);
     }
 
+    @Test
+    public void testUpdateDish() {
+        // Arrange
+        Long id = 1L;
+        Dish dish = new Dish();
+        dish.setDescription("Contiene camarones");
+        dish.setPrice(48000);
 
+        // Act
+        dishPersistencePort.updateDish(id, dish);
 
+        // Assert
+        Mockito.verify(dishPersistencePort).updateDish(id, dish);
+    }
 
 }

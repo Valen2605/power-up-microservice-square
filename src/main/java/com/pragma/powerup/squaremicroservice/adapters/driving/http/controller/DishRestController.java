@@ -2,6 +2,7 @@ package com.pragma.powerup.squaremicroservice.adapters.driving.http.controller;
 
 
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.request.DishRequestDto;
+import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.request.DishUpdateRequestDto;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.handlers.IDishHandler;
 import com.pragma.powerup.squaremicroservice.configuration.Constants;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,10 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.Map;
@@ -39,5 +37,19 @@ public class DishRestController {
         dishHandler.saveDish(dishRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_CREATED_MESSAGE));
+    }
+
+    @Operation(summary = "Update a dish",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Dish Updated",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = DishUpdateRequestDto.class))),
+                    @ApiResponse(responseCode = "404", description = "Dish not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
+            })
+    @PatchMapping("/updateDish/{id}")
+    public ResponseEntity<Map<String, String>> updateDish(@PathVariable Long id, @Schema(implementation = DishUpdateRequestDto.class) @RequestBody DishRequestDto dishRequestDto) {
+        dishHandler.updateDish(id, dishRequestDto);
+        return ResponseEntity.ok()
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_UPDATED_MESSAGE));
     }
 }

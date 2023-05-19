@@ -4,4 +4,6 @@ import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.request.D
 
 public interface IDishHandler {
     void saveDish(DishRequestDto dishRequestDto);
+
+    void updateDish(Long id,DishRequestDto dishRequestDto);
 }

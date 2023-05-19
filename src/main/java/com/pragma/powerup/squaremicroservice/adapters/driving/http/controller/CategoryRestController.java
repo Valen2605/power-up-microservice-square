@@ -1,12 +1,10 @@
 package com.pragma.powerup.squaremicroservice.adapters.driving.http.controller;
 
 
-import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.response.CategoryResponseDto;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.request.CategoryRequestDto;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.handlers.ICategoryHandler;
 import com.pragma.powerup.squaremicroservice.configuration.Constants;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 @RestController

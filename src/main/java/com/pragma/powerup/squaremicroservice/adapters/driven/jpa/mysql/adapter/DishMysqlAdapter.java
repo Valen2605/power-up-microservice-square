@@ -4,6 +4,7 @@ package com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.adapter;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.DishEntity;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.CategoryNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.DishAlreadyExistsException;
+import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.DishNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.mappers.IDishEntityMapper;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IDishRepository;
@@ -39,6 +40,17 @@ public class DishMysqlAdapter implements IDishPersistencePort {
         }
 
         dishRepository.save(dishEntityMapper.toEntity(dish));
+
+    }
+
+    @Override
+    public void updateDish(Long id, Dish dish){
+
+        DishEntity dishEntityUpdate = dishRepository.findById(id).orElseThrow(DishNotFoundException::new);
+
+        dishEntityUpdate.setDescription(dish.getDescription());
+        dishEntityUpdate.setPrice(dish.getPrice());
+        dishRepository.save(dishEntityUpdate);
 
     }
 }
