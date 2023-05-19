@@ -4,7 +4,6 @@ package com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.adapter;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.DishEntity;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.CategoryNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.DishAlreadyExistsException;
-import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantAlreadyExistsException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.mappers.IDishEntityMapper;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IDishRepository;

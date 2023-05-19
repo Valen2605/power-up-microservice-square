@@ -40,7 +40,7 @@ class RestaurantRestControllerTest {
 
     @Test
     @DisplayName("Returns CREATED when a valid user is passed to it")
-    void testSaveUser() {
+    void testSaveRestaurant() {
         // Arrange
         Mockito.doNothing().when(restaurantHandler).saveRestaurant(restaurantRequestDto);
 
