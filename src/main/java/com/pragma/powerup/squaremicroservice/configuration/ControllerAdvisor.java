@@ -94,4 +94,13 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, DISH_NOT_FOUND_MESSAGE));
     }
+
+    @ExceptionHandler(NoRestaurantOwnerException.class)
+    public ResponseEntity<Map<String, String>> handleNoRestaurantOwnerException(
+            NoRestaurantOwnerException noRestaurantOwnerException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, NOT_RESTAURANT_OWNER_MESSAGE));
+    }
+
+
 }
