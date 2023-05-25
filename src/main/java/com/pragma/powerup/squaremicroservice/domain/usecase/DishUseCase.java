@@ -3,7 +3,6 @@ package com.pragma.powerup.squaremicroservice.domain.usecase;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.DishEntity;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.DishNotFoundException;
-import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.NoRestaurantOwnerException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IDishRepository;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IRestaurantRepository;
@@ -33,13 +32,10 @@ public class DishUseCase implements IDishServicePort {
     public void validateOwner(Long idRestaurant){
         Interceptor interceptor = new Interceptor();
         Optional<RestaurantEntity> restaurant = Optional.of(new RestaurantEntity());
-         if(!restaurantRepository.findById(idRestaurant).isPresent()){
-             throw new RestaurantNotFoundException();
-         }
-         restaurant = restaurantRepository.findById(idRestaurant);
-        if(!interceptor.getIdUser().equals(restaurant.get().getIdOwner())){
-            throw new NoRestaurantOwnerException();
+        if(!restaurantRepository.findById(idRestaurant).isPresent()){
+            throw new RestaurantNotFoundException();
         }
+        restaurant = restaurantRepository.findById(idRestaurant);
     }
 
     @Override

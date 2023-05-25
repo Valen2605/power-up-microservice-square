@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class Interceptor implements HandlerInterceptor {
@@ -37,6 +37,8 @@ public class Interceptor implements HandlerInterceptor {
         roles = decodedJWT.getClaim("roles").asList(String.class);
         idUser = decodedJWT.getClaim("user").asLong();
         String roleUser = roles.get(0);
+
+
         if (admin.equals(roleUser) && isAllowedAdminEndpoint(request.getRequestURI())) {
             return true;
         }
@@ -49,7 +51,7 @@ public class Interceptor implements HandlerInterceptor {
         return false;
     }
 
-    private boolean isAllowedOwnerEndpoint(String requestURI) {
+     private boolean isAllowedOwnerEndpoint(String requestURI) {
 
         if (requestURI.startsWith("/category/")) {
             return true;
