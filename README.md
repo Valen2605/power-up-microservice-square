@@ -81,6 +81,18 @@ the domain layer and encapsulates the business logic and rules.
 ### Exit point create restaurant
 ![Image text](/img/ExitPointCreateRestaurant.jpg)
 
+### Entry point create dish Owner Authentication token
+![Image text](img/EntryPointCreateDishAutenticationOwner.jpg)
+
+### Exit point create dish
+![Image text](/img/ExitPointCreateDish.jpg)
+
+### Entry point update dish Owner Authentication token
+![Image text](img/EntryPointUpdateDish.jpg)
+
+### Exit point update dish
+![Image text](/img/ExitPointUpdateDish.jpg)
+
 
 ## Author ✒️
 * **Valentina Santa Muñoz** 
