@@ -1,9 +1,12 @@
 package com.pragma.powerup.squaremicroservice.adapters.driving.http.adapter;
 
+import com.pragma.powerup.squaremicroservice.configuration.security.Interceptor;
 import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotFoundException;
 import com.pragma.powerup.squaremicroservice.domain.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -17,6 +20,8 @@ import org.springframework.web.client.RestTemplate;
 public class OwnerHttpAdapter {
 
     private final RestTemplate restTemplate;
+
+    Interceptor interceptor = new Interceptor();
 
     @Value("${my.variables.url}")
     String url;
@@ -32,9 +37,12 @@ public class OwnerHttpAdapter {
 
         String urlInfo = url + id;
         ResponseEntity<User> response = null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization",interceptor.getToken());
+        HttpEntity<?> entity = new HttpEntity<>(headers);
 
         try{
-            response = restTemplate.exchange(urlInfo, HttpMethod.GET, null, User.class);
+            response = restTemplate.exchange(urlInfo, HttpMethod.GET, entity, User.class);
         }catch (HttpClientErrorException e){
             if(!e.getStatusCode().is2xxSuccessful()) throw new UserNotFoundException();
 

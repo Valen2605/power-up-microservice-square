@@ -28,6 +28,8 @@ public class Constants {
     public static final String CATEGORY_ALREADY_EXISTS_MESSAGE = "There is already a category associated with this name";
     public static final String DISH_ALREADY_EXISTS_MESSAGE = "This dish already exists for this restaurant";
     public static final String USER_NOT_A_OWNER_MESSAGE = "The user is not an owner";
+
+    public static final String NOT_RESTAURANT_OWNER_MESSAGE = "The user is not the owner of the restaurant";
     public static final String SWAGGER_TITLE_MESSAGE = "User API Pragma Power Up";
     public static final String SWAGGER_DESCRIPTION_MESSAGE = "User microservice";
     public static final String SWAGGER_VERSION_MESSAGE = "1.0.0";
