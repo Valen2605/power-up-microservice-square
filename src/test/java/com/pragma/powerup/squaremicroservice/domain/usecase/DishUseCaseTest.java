@@ -154,7 +154,7 @@ class DishUseCaseTest {
     }
 
     @Test
-    public void enableDisableDish_ValidId_DishEnabled() {
+    void enableDisableDish_ValidId_DishEnabled() {
         // Arrange
         Long id = 1L;
         DishEntity dish = new DishEntity();
