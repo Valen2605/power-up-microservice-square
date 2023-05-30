@@ -6,4 +6,6 @@ public interface IDishPersistencePort {
     void saveDish(Dish dish);
 
     void updateDish(Long id, Dish dish);
+
+    void enableDisableDish(Long id);
 }

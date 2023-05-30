@@ -9,6 +9,7 @@ import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositor
 import com.pragma.powerup.squaremicroservice.configuration.security.Interceptor;
 import com.pragma.powerup.squaremicroservice.domain.api.IDishServicePort;
 
+import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotBeAOwnerException;
 import com.pragma.powerup.squaremicroservice.domain.model.Dish;
 import com.pragma.powerup.squaremicroservice.domain.spi.IDishPersistencePort;
 
@@ -31,11 +32,14 @@ public class DishUseCase implements IDishServicePort {
 
     public void validateOwner(Long idRestaurant){
         Interceptor interceptor = new Interceptor();
-        Optional<RestaurantEntity> restaurant = Optional.of(new RestaurantEntity());
+        Optional<RestaurantEntity> restaurant = restaurantRepository.findById(idRestaurant);
         if(!restaurantRepository.findById(idRestaurant).isPresent()){
             throw new RestaurantNotFoundException();
         }
-        restaurant = restaurantRepository.findById(idRestaurant);
+        Long userId = interceptor.getIdUser();
+        if (!restaurant.get().getIdOwner().equals(userId)) {
+            throw new UserNotBeAOwnerException();
+        }
     }
 
     @Override
@@ -52,5 +56,13 @@ public class DishUseCase implements IDishServicePort {
         dishPersistencePort.updateDish(id,dish);
     }
 
+    @Override
+    public void enableDisableDish(Long id) {
+        DishEntity dish = dishRepository.findById(id).orElseThrow(DishNotFoundException::new);
+        validateOwner(dish.getRestaurantEntity().getId());
+        dishRepository.save(dish);
+        dishPersistencePort.enableDisableDish(id);
+
+    }
 
 }

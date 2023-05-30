@@ -26,11 +26,9 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     public void saveRestaurant(Restaurant restaurant){
         Long idOwner = restaurant.getIdOwner();
         User user = ownerHttpAdapter.getOwner(idOwner);
-
-        if (!user.getIdRole().equals (Constants.OWNER_ROLE_ID)){
+        if (!user.getIdRole().equals(Constants.OWNER_ROLE_ID)){
             throw new UserNotBeAOwnerException();
         }
-
         restaurantPersistencePort.saveRestaurant(restaurant);
     }
 
