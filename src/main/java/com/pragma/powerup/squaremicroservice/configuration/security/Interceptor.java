@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -16,8 +17,10 @@ public class Interceptor implements HandlerInterceptor {
 
     private static final String TOKEN_PREFIX = "Bearer ";
 
+    @Setter
     private static String token;
 
+    @Setter
     private static Long idUser;
 
     @Value("${my.variables.admin}")
@@ -67,11 +70,11 @@ public class Interceptor implements HandlerInterceptor {
         return requestURI.startsWith("/restaurant/");
     }
 
-    public String getToken(){
+    public static String getToken(){
         return token;
     }
 
-    public Long getIdUser(){
+    public static Long getIdUser(){
         return idUser;
     }
 }

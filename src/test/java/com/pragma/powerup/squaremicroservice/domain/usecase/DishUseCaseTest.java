@@ -8,6 +8,7 @@ import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exception
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IDishRepository;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IRestaurantRepository;
+import com.pragma.powerup.squaremicroservice.configuration.security.Interceptor;
 import com.pragma.powerup.squaremicroservice.domain.model.Category;
 import com.pragma.powerup.squaremicroservice.domain.model.Dish;
 import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
@@ -29,12 +30,10 @@ class DishUseCaseTest {
 
 
     private DishUseCase dishUseCase;
-
     @Mock
     private IRestaurantRepository restaurantRepository;
     @Mock
     private IDishRepository dishRepository;
-
 
 
     @Mock
@@ -88,7 +87,11 @@ class DishUseCaseTest {
                 new Restaurant(1L, "Restaurante 1", "Calle 50", "3328752", "urlimagen.jpg", 2L, "1235156"), "url", true);
         RestaurantEntity restaurantEntity = new RestaurantEntity(1L, "Restaurante 1", "Calle 50", "3328752", "urlimagen.jpg", 2L, "1235156");
 
+        Interceptor.setIdUser(2L);
+
         when(restaurantRepository.findById(dish.getRestaurant().getId())).thenReturn(Optional.of(restaurantEntity));
+        when(dishRepository.findAllByRestaurantEntityId(restaurantEntity.getId())).thenReturn(new ArrayList<>());
+        when(dishRepository.findAllByCategoryEntityId(dish.getCategory().getId())).thenReturn(new ArrayList<>());
 
         // Act
         dishUseCase.saveDish(dish);
@@ -118,9 +121,12 @@ class DishUseCaseTest {
                 new Restaurant(1L, "Restaurante 1", "Calle 50", "3328752", "urlimagen.jpg", 8L, "1235156"), "url", true);
         DishEntity dishEntity = new DishEntity(dishId, "Arroz con verduras", new CategoryEntity(), "Lleva carne y pollo", 15000,
                 new RestaurantEntity(1L, "Restaurante 1", "Calle 50", "3328752", "urlimagen.jpg", 8L, "1235156"), "url", true);
+
+        Interceptor.setIdUser(8L);
         Optional<DishEntity> dishEntityOptional = Optional.of(dishEntity);
         when(dishRepository.findById(dishId)).thenReturn(dishEntityOptional);
         when(restaurantRepository.findById(updatedDish.getRestaurant().getId())).thenReturn(Optional.of(dishEntity.getRestaurantEntity()));
+
 
         // Act
         dishUseCase.updateDish(dishId, updatedDish);
@@ -130,4 +136,47 @@ class DishUseCaseTest {
         verify(restaurantRepository, atLeastOnce()).findById(updatedDish.getRestaurant().getId());
         verify(dishPersistencePort).updateDish(dishId, updatedDish);
     }
+
+
+    @Test
+    void enableDisableDishInvalidId() {
+        // Arrange
+        Long id = 1L;
+        when(dishRepository.findById(id)).thenReturn(Optional.empty());
+
+        // Act and Assert
+        assertThrows(DishNotFoundException.class, () -> {
+            dishUseCase.enableDisableDish(id);
+        });
+        verify(dishRepository).findById(id);
+        verifyNoMoreInteractions(dishRepository);
+        verify(dishPersistencePort);
+    }
+
+    @Test
+    public void enableDisableDish_ValidId_DishEnabled() {
+        // Arrange
+        Long id = 1L;
+        DishEntity dish = new DishEntity();
+        dish.setId(id);
+        RestaurantEntity restaurant = new RestaurantEntity();
+        restaurant.setId(1L);
+        Interceptor.setIdUser(8L);
+        restaurant.setIdOwner(8L);
+        dish.setRestaurantEntity(restaurant);
+
+        when(restaurantRepository.findById(dish.getRestaurantEntity().getId())).thenReturn(Optional.of(dish.getRestaurantEntity()));
+        when(dishRepository.findById(id)).thenReturn(Optional.of(dish));
+
+        // Act
+        dishUseCase.enableDisableDish(id);
+
+        // Assert
+        verify(restaurantRepository,atLeastOnce()).findById(dish.getRestaurantEntity().getId());
+        verify(dishRepository, times(1)).findById(id);
+        verify(dishRepository, times(1)).save(dish);
+        verify(dishPersistencePort, times(1)).enableDisableDish(id);
+    }
+
+
 }

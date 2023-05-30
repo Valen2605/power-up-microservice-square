@@ -31,12 +31,11 @@ public class DishUseCase implements IDishServicePort {
     }
 
     public void validateOwner(Long idRestaurant){
-        Interceptor interceptor = new Interceptor();
-        Optional<RestaurantEntity> restaurant = restaurantRepository.findById(idRestaurant);
         if(!restaurantRepository.findById(idRestaurant).isPresent()){
             throw new RestaurantNotFoundException();
         }
-        Long userId = interceptor.getIdUser();
+        Optional<RestaurantEntity> restaurant = restaurantRepository.findById(idRestaurant);
+        Long userId = Interceptor.getIdUser();
         if (!restaurant.get().getIdOwner().equals(userId)) {
             throw new UserNotBeAOwnerException();
         }
