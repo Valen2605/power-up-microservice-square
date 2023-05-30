@@ -21,8 +21,6 @@ public class OwnerHttpAdapter {
 
     private final RestTemplate restTemplate;
 
-    Interceptor interceptor = new Interceptor();
-
     @Value("${my.variables.url}")
     String url;
 
@@ -38,7 +36,7 @@ public class OwnerHttpAdapter {
         String urlInfo = url + id;
         ResponseEntity<User> response = null;
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization",interceptor.getToken());
+        headers.set("Authorization",Interceptor.getToken());
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
         try{

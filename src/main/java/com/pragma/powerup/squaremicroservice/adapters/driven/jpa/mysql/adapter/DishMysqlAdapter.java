@@ -53,4 +53,11 @@ public class DishMysqlAdapter implements IDishPersistencePort {
         dishRepository.save(dishEntityUpdate);
 
     }
+
+    @Override
+    public void enableDisableDish(Long id){
+        DishEntity dish = dishRepository.findById(id).orElseThrow(DishNotFoundException::new);
+        dish.setActive(!dish.getActive());
+            dishRepository.save(dish);
+    }
 }

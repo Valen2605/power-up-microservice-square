@@ -54,4 +54,18 @@ public class DishRestController {
         return ResponseEntity.ok()
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_UPDATED_MESSAGE));
     }
+
+    @Operation(summary = "Update a dish",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Enable/Disable Dish",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = DishUpdateRequestDto.class))),
+                    @ApiResponse(responseCode = "404", description = "Dish not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
+            })
+    @PatchMapping("/enableDisableDish/{id}")
+    public ResponseEntity<Map<String, String>> enableDisableDish(@PathVariable Long id) {
+        dishHandler.enableDisableDish(id);
+        return ResponseEntity.ok()
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_UPDATED_MESSAGE));
+    }
 }
