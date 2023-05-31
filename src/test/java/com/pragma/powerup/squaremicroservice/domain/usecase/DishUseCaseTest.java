@@ -15,6 +15,8 @@ import com.pragma.powerup.squaremicroservice.domain.model.Category;
 import com.pragma.powerup.squaremicroservice.domain.model.Dish;
 import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
 import com.pragma.powerup.squaremicroservice.domain.spi.IDishPersistencePort;
+import com.pragma.powerup.squaremicroservice.domain.spi.IRestaurantPersistencePort;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -36,6 +38,9 @@ class DishUseCaseTest {
     private IRestaurantRepository restaurantRepository;
     @Mock
     private IDishRepository dishRepository;
+
+    @Mock
+    private IRestaurantPersistencePort restaurantPersistencePort;
 
 
     @Mock
@@ -83,36 +88,28 @@ class DishUseCaseTest {
         // Act y Assert
         dishUseCase.validateOwner(idRestaurant);
     }
+
     @Test
-    void saveDishWhenDishAlreadyExists() {
+    void saveDish_WhenNewPlateWithValidOwner_ShouldSavePlateInRepository() {
         // Arrange
-        Dish dish = new Dish();
-        dish.setId(1L);
-        dish.setName("Arroz con pollo");
-        Restaurant restaurant = new Restaurant();
-        restaurant.setId(1L);
-        restaurant.setIdOwner(8L);
-        dish.setActive(true);
-        dish.setRestaurant(restaurant);
-        RestaurantEntity restaurantEntity = new RestaurantEntity(1L, "Restaurante 1", "Calle 50", "3328752", "urlimagen.jpg", 8L, "1235156");
-        Interceptor.setIdUser(8L);
+        Dish dish = new Dish(1L, "Arroz chino", new Category(), "Lleva verduras y raíces chinas", 15000,
+                new Restaurant(1L, "Restaurante 1", "Calle 50", "3328752", "urlimagen.jpg", 2L, "1235156"), "url", true);
+        RestaurantEntity restaurantEntity = new RestaurantEntity(1L, "Restaurante 1", "Calle 50", "3328752", "urlimagen.jpg", 2L, "1235156");
 
+        Interceptor.setIdUser(2L);
         restaurantEntity.setIdOwner(Interceptor.getIdUser());
-
-        DishEntity existingDishEntity = new DishEntity();
-        existingDishEntity.setName("Arroz con pollo");
-        existingDishEntity.setId(1L);
-        List<DishEntity> existingDishes = new ArrayList<>();
-        existingDishes.add(existingDishEntity);
-
-        when(dishRepository.findById(dish.getId())).thenReturn(Optional.of(existingDishEntity));
+        when(restaurantRepository.existsById(dish.getRestaurant().getId())).thenReturn(true);
         when(restaurantRepository.findById(dish.getRestaurant().getId())).thenReturn(Optional.of(restaurantEntity));
-        when(dishRepository.findAllByRestaurantEntityId(restaurant.getId())).thenReturn(existingDishes);
+        when(dishRepository.existsById(dish.getCategory().getId())).thenReturn(true);
 
+        // Act
+        dishUseCase.saveDish(dish);
 
-        // Act & Assert
-        assertThrows(DishAlreadyExistsException.class, () -> dishUseCase.saveDish(dish));
+        // Assert
+        verify(restaurantRepository, atLeastOnce()).findById(dish.getRestaurant().getId());
+        verify(dishPersistencePort).saveDish(dish);
     }
+
 
     @Test
     void saveDishWhenRestaurantNotFound() {
