@@ -4,11 +4,13 @@ package com.pragma.powerup.squaremicroservice.domain.usecase;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.CategoryEntity;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.DishEntity;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
+import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.DishAlreadyExistsException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.DishNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IDishRepository;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IRestaurantRepository;
 import com.pragma.powerup.squaremicroservice.configuration.security.Interceptor;
+import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotBeAOwnerException;
 import com.pragma.powerup.squaremicroservice.domain.model.Category;
 import com.pragma.powerup.squaremicroservice.domain.model.Dish;
 import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
@@ -45,25 +47,71 @@ class DishUseCaseTest {
         dishUseCase = new DishUseCase(restaurantRepository,dishRepository,dishPersistencePort );
     }
 
+
+    @Test
+    void testValidateIdOwner() {
+        // Arrange
+        Long idRestaurant = 1L;
+        Long idOwnerToken = 123456789L;
+
+        Interceptor.setIdUser(idOwnerToken);
+
+        RestaurantEntity restaurantEntity = new RestaurantEntity();
+        restaurantEntity.setIdOwner(119129L);
+
+        when(restaurantRepository.findById(idRestaurant)).thenReturn(Optional.of(restaurantEntity));
+
+        // Act y Assert
+        assertThrows(UserNotBeAOwnerException.class, () -> dishUseCase.validateOwner(idRestaurant));
+    }
+
+    @Test
+    void testValidateIdOwner_NoExceptionThrown() {
+        // Arrange
+        Long idRestaurant = 1L;
+        Long idOwnerToken = 123456789L;
+
+        Interceptor.setIdUser(idOwnerToken);
+
+
+        RestaurantEntity restaurantEntity = new RestaurantEntity();
+        restaurantEntity.setIdOwner(123456789L);
+
+
+        when(restaurantRepository.findById(idRestaurant)).thenReturn(Optional.of(restaurantEntity));
+
+        // Act y Assert
+        dishUseCase.validateOwner(idRestaurant);
+    }
     @Test
     void saveDishWhenDishAlreadyExists() {
         // Arrange
         Dish dish = new Dish();
+        dish.setId(1L);
         dish.setName("Arroz con pollo");
         Restaurant restaurant = new Restaurant();
         restaurant.setId(1L);
+        restaurant.setIdOwner(8L);
+        dish.setActive(true);
         dish.setRestaurant(restaurant);
+        RestaurantEntity restaurantEntity = new RestaurantEntity(1L, "Restaurante 1", "Calle 50", "3328752", "urlimagen.jpg", 8L, "1235156");
+        Interceptor.setIdUser(8L);
+
+        restaurantEntity.setIdOwner(Interceptor.getIdUser());
 
         DishEntity existingDishEntity = new DishEntity();
         existingDishEntity.setName("Arroz con pollo");
-
+        existingDishEntity.setId(1L);
         List<DishEntity> existingDishes = new ArrayList<>();
         existingDishes.add(existingDishEntity);
 
+        when(dishRepository.findById(dish.getId())).thenReturn(Optional.of(existingDishEntity));
+        when(restaurantRepository.findById(dish.getRestaurant().getId())).thenReturn(Optional.of(restaurantEntity));
         when(dishRepository.findAllByRestaurantEntityId(restaurant.getId())).thenReturn(existingDishes);
 
+
         // Act & Assert
-        assertThrows(RestaurantNotFoundException.class, () -> dishUseCase.saveDish(dish));
+        assertThrows(DishAlreadyExistsException.class, () -> dishUseCase.saveDish(dish));
     }
 
     @Test
@@ -73,6 +121,8 @@ class DishUseCaseTest {
         Restaurant restaurant = new Restaurant();
         restaurant.setId(1L);
         dish.setRestaurant(restaurant);
+
+        when(restaurantRepository.findById(1L)).thenReturn(Optional.empty());
 
         when(dishRepository.findAllByRestaurantEntityId(restaurant.getId())).thenReturn(new ArrayList<>());
 
