@@ -93,6 +93,12 @@ the domain layer and encapsulates the business logic and rules.
 ### Exit point update dish
 ![Image text](/img/ExitPointUpdateDish.jpg)
 
+### Entry point enable/disable dish
+![Image text](img/EntryPointEnableDisableDish.jpg)
+
+### Exit point enable/disable dish
+![Image text](/img/ExitPointEnableDisableDish.jpg)
+
 
 ## Author ✒️
 * **Valentina Santa Muñoz** 
