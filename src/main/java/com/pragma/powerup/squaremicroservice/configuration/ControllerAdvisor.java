@@ -109,5 +109,11 @@ public class ControllerAdvisor {
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, INCORRECT_NUMBER_LENGHT));
     }
 
+    @ExceptionHandler(PageNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handlePageNotFoundException() {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, PAGE_NOT_FOUND));
+    }
+
 
 }

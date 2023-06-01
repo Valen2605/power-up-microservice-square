@@ -1,5 +1,6 @@
 package com.pragma.powerup.squaremicroservice.domain.usecase;
 
+import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.adapter.OwnerHttpAdapter;
 import com.pragma.powerup.squaremicroservice.configuration.Constants;
 import com.pragma.powerup.squaremicroservice.domain.api.IRestaurantServicePort;
@@ -10,6 +11,8 @@ import com.pragma.powerup.squaremicroservice.domain.model.User;
 import com.pragma.powerup.squaremicroservice.domain.spi.IRestaurantPersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.utility.Pagination;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;

@@ -28,9 +28,8 @@ public class Constants {
     public static final String CATEGORY_ALREADY_EXISTS_MESSAGE = "There is already a category associated with this name";
     public static final String DISH_ALREADY_EXISTS_MESSAGE = "This dish already exists for this restaurant";
     public static final String USER_NOT_A_OWNER_MESSAGE = "The user is not an owner";
-
     public static final String INCORRECT_NUMBER_LENGHT = "The number of charact cannot be empty or exceed the number of characters";
-
+    public static final String PAGE_NOT_FOUND = "Page could not be found";
     public static final String NOT_RESTAURANT_OWNER_MESSAGE = "The user is not the owner of the restaurant";
     public static final String SWAGGER_TITLE_MESSAGE = "User API Pragma Power Up";
     public static final String SWAGGER_DESCRIPTION_MESSAGE = "User microservice";

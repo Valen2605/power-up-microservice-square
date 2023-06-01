@@ -1,7 +1,9 @@
 package com.pragma.powerup.squaremicroservice.domain.usecase;
 
+import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.adapter.OwnerHttpAdapter;
 import com.pragma.powerup.squaremicroservice.configuration.Constants;
+import com.pragma.powerup.squaremicroservice.domain.exceptions.PageNotFoundException;
 import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotBeAOwnerException;
 import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
 import com.pragma.powerup.squaremicroservice.domain.model.User;
@@ -20,6 +22,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 class RestaurantUseCaseTest {
@@ -84,5 +88,40 @@ class RestaurantUseCaseTest {
         Mockito.verify(restaurantPersistencePort, never()).saveRestaurant(any(Restaurant.class));
     }
 
+
+    @Test
+    void getAllRestaurantsValidPage() {
+        // Arrange
+        int page = 1;
+        int pageSize = 3;
+        List<Restaurant> restaurants = Arrays.asList(
+                new Restaurant(13L, "Mi Restaurante 1", "carrera 13 #12-12","456789","image.jpg",1L, "123456"),
+                new Restaurant(14L, "Mi Restaurante 2", "carrera 13 #12-12","456789","image.jpg",1L, "123456"),
+                new Restaurant(15L, "Mi Restaurante 3", "carrera 13 #12-12","456789","image.jpg",1L, "123456")
+        );
+        when(restaurantPersistencePort.getAllRestaurants(page, pageSize)).thenReturn(restaurants);
+
+        // Act
+        List<Restaurant> result = restaurantPersistencePort.getAllRestaurants(page, pageSize);
+
+        // Assert
+        verify(restaurantPersistencePort, times(1)).getAllRestaurants(page, pageSize);
+        assertEquals(pageSize, result.size());
+        assertEquals("Mi Restaurante 1", result.get(0).getName());
+        assertEquals("Mi Restaurante 2", result.get(1).getName());
+        assertEquals("Mi Restaurante 3", result.get(2).getName());
+    }
+
+    @Test
+    void getAllRestaurantsInvalidPage() {
+        // Arrange
+        int page = 0;
+        int pageSize = 10;
+
+        // Act and Assert
+        Assertions.assertThrows(PageNotFoundException.class, () -> {
+            restaurantUseCase.getAllRestaurants(page, pageSize);
+        });
+    }
 
 }
