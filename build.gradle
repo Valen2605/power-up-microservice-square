@@ -63,7 +63,8 @@ jacocoTestReport {
 										'com/pragma/powerup/squaremicroservice/domain/exceptions',
 										'com/pragma/powerup/squaremicroservice/adapters/driven/jpa/mysql/adapter',
 										'com/pragma/powerup/squaremicroservice/adapters/driving/http/dto/request',
-			                            'com/pragma/powerup/squaremicroservice/adapters/driving/http/controller'])
+			                            'com/pragma/powerup/squaremicroservice/adapters/driving/http/controller',
+			                            'com/pragma/powerup/squaremicroservice/domain/utility'])
 		}))
 	}
 }

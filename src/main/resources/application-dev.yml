@@ -21,7 +21,9 @@ my:
     url: "http://localhost:8090/user/"
     admin: "ROLE_ADMIN"
     owner: "ROLE_OWNER"
-    employee: "ROLE_CLIENT"
+    employee: "ROLE_EMPLOYEE"
+    client: "ROLE_CUSTOMER"
+
 
 
 
