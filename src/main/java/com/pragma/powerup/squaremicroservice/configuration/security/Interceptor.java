@@ -29,6 +29,9 @@ public class Interceptor implements HandlerInterceptor {
     @Value("${my.variables.owner}")
     String owner;
 
+    @Value("${my.variables.client}")
+    String client;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
         token = request.getHeader("Authorization");
@@ -50,6 +53,10 @@ public class Interceptor implements HandlerInterceptor {
             return true;
         }
 
+        if (client.equals(roleUser) && isAllowedClientEndpoint(request.getRequestURI())) {
+            return true;
+        }
+
         response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied");
         return false;
     }
@@ -68,6 +75,11 @@ public class Interceptor implements HandlerInterceptor {
 
     private boolean isAllowedAdminEndpoint(String requestURI) {
         return requestURI.startsWith("/restaurant/");
+    }
+
+    private boolean isAllowedClientEndpoint(String requestURI) {
+        return requestURI.startsWith("/restaurant/allRestaurants");
+
     }
 
     public static String getToken(){
