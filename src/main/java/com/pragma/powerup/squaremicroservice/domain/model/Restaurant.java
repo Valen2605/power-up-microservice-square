@@ -1,5 +1,6 @@
 package com.pragma.powerup.squaremicroservice.domain.model;
 
+
 public class Restaurant {
     private Long id;
     private String name;

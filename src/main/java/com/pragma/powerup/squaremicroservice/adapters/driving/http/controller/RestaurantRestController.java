@@ -2,6 +2,7 @@ package com.pragma.powerup.squaremicroservice.adapters.driving.http.controller;
 
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.request.RestaurantRequestDto;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.response.RestaurantResponseDto;
+import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.response.RestaurantsResponseDto;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.handlers.IRestaurantHandler;
 import com.pragma.powerup.squaremicroservice.configuration.Constants;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,7 +50,7 @@ public class RestaurantRestController {
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
             })
     @GetMapping("/allRestaurants")
-    public ResponseEntity<List<RestaurantResponseDto>> getAllRestaurants(@RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<List<RestaurantsResponseDto>> getAllRestaurants(@RequestParam int page, @RequestParam int size) {
 
         return ResponseEntity.ok(restaurantHandler.getAllRestaurants(page, size));
     }
