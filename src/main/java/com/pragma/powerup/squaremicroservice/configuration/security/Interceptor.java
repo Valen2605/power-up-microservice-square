@@ -70,11 +70,15 @@ public class Interceptor implements HandlerInterceptor {
         if (requestURI.startsWith("/dish/")) {
             return true;
         }
+
+         if (requestURI.startsWith("/restaurant/employee")) {
+             return true;
+         }
         return false;
     }
 
     private boolean isAllowedAdminEndpoint(String requestURI) {
-        return requestURI.startsWith("/restaurant/");
+        return requestURI.startsWith("/restaurant/createRestaurant/");
     }
 
     private boolean isAllowedClientEndpoint(String requestURI) {

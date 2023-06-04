@@ -1,8 +1,10 @@
 package com.pragma.powerup.squaremicroservice.adapters.driving.http.handlers.impl;
 
+import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.request.EmployeeRequestDto;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.request.RestaurantRequestDto;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.response.RestaurantsResponseDto;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.handlers.IRestaurantHandler;
+import com.pragma.powerup.squaremicroservice.adapters.driving.http.mapper.IEmployeeRequestMapper;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.mapper.IRestaurantRequestMapper;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.mapper.IRestaurantResponseMapper;
 import com.pragma.powerup.squaremicroservice.domain.api.IRestaurantServicePort;
@@ -18,6 +20,8 @@ public class RestaurantHandlerImpl implements IRestaurantHandler {
     private final IRestaurantServicePort restaurantServicePort;
     private final IRestaurantRequestMapper restaurantRequestMapper;
     private final IRestaurantResponseMapper restaurantResponseMapper;
+    private final IEmployeeRequestMapper employeeRequestMapper;
+
 
     @Override
     public void saveRestaurant(RestaurantRequestDto restaurantRequestDto){
@@ -28,4 +32,11 @@ public class RestaurantHandlerImpl implements IRestaurantHandler {
     public List<RestaurantsResponseDto> getAllRestaurants(int page, int pageSize) {
         return restaurantResponseMapper.toResponseList(restaurantServicePort.getAllRestaurants(page, pageSize));
     }
+
+    @Override
+    public void addEmployee(EmployeeRequestDto employeeRequestDto) {
+        restaurantServicePort.addEmployee(employeeRequestMapper.toEmployee(employeeRequestDto));
+    }
+
+
 }

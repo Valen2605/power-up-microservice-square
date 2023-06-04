@@ -1,5 +1,6 @@
 package com.pragma.powerup.squaremicroservice.adapters.driving.http.controller;
 
+import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.request.EmployeeRequestDto;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.request.RestaurantRequestDto;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.response.RestaurantsResponseDto;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.handlers.IRestaurantHandler;
@@ -52,5 +53,19 @@ public class RestaurantRestController {
     public ResponseEntity<List<RestaurantsResponseDto>> getAllRestaurants(@RequestParam int page, @RequestParam int size) {
 
         return ResponseEntity.ok(restaurantHandler.getAllRestaurants(page, size));
+    }
+
+    @Operation(summary = "Add a new employee",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Restaurant created",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "409", description = "Restaurant already exists",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
+            })
+    @PostMapping("/employee")
+    public ResponseEntity<Map<String, String>> addEmployee(@Valid @RequestBody EmployeeRequestDto employeeRequestDto){
+        restaurantHandler.addEmployee(employeeRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.RESTAURANT_CREATED_MESSAGE));
     }
 }
