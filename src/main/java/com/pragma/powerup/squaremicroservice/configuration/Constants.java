@@ -20,6 +20,7 @@ public class Constants {
     public static final String RESTAURANT_NOT_FOUND_MESSAGE = "No restaurant found with the id provided";
     public static final String CATEGORY_NOT_FOUND_MESSAGE = "No category found with the id provided";
     public static final String RESTAURANT_CREATED_MESSAGE = "Restaurant has been successfully created";
+    public static final String EMPLOYEE_ADDED_MESSAGE = "Employee has been successfully added to restaurant";
     public static final String DISH_CREATED_MESSAGE = "Dish has been successfully created";
     public static final String DISH_UPDATED_MESSAGE = "Dish has been successfully updated";
     public static final String DISH_NOT_FOUND_MESSAGE = "The dish you want to modify does not exist";
