@@ -54,11 +54,25 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, RESTAURANT_NOT_FOUND_MESSAGE));
     }
+
+    @ExceptionHandler(EmployeeAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>> handleEmployeeAlreadyExistsException(
+            EmployeeAlreadyExistsException employeeAlreadyExistsException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, EMPLOYEE_ALREADY_EXISTS_MESSAGE));
+    }
     @ExceptionHandler(UserNotBeAOwnerException.class)
     public ResponseEntity<Map<String, String>> handleUserNotBeAOwnerException(
             UserNotBeAOwnerException userNotBeAOwnerException) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_NOT_A_OWNER_MESSAGE));
+    }
+
+    @ExceptionHandler(UserNotBeAEmployeeException.class)
+    public ResponseEntity<Map<String, String>> handleUserNotBeAEmployeeException(
+            UserNotBeAEmployeeException userNotBeAEmployeeException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_NOT_A_EMPLOYEE_MESSAGE));
     }
 
     @ExceptionHandler(UserNotFoundException.class)

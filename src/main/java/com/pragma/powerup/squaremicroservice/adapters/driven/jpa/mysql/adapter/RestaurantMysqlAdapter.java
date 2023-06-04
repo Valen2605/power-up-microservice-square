@@ -35,5 +35,7 @@ public class RestaurantMysqlAdapter implements IRestaurantPersistencePort {
             throw new RestaurantNotFoundException();
         }
         return restaurantEntityMapper.toRestaurantList(restaurantEntities);
+
+
     }
 }

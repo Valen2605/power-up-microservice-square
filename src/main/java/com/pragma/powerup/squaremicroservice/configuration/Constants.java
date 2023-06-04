@@ -25,9 +25,11 @@ public class Constants {
     public static final String DISH_NOT_FOUND_MESSAGE = "The dish you want to modify does not exist";
     public static final String CATEGORY_CREATED_MESSAGE = "Category has been successfully created";
     public static final String RESTAURANT_ALREADY_EXISTS_MESSAGE = "There is already a restaurant associated with this identification number";
+    public static final String EMPLOYEE_ALREADY_EXISTS_MESSAGE = "There is already a employee associated with this identification number";
     public static final String CATEGORY_ALREADY_EXISTS_MESSAGE = "There is already a category associated with this name";
     public static final String DISH_ALREADY_EXISTS_MESSAGE = "This dish already exists for this restaurant";
     public static final String USER_NOT_A_OWNER_MESSAGE = "The user is not an owner";
+    public static final String USER_NOT_A_EMPLOYEE_MESSAGE = "The user to be added must be an employee";
     public static final String INCORRECT_NUMBER_LENGHT = "The number of charact cannot be empty or exceed the number of characters";
     public static final String PAGE_NOT_FOUND = "Page could not be found";
     public static final String INCORRECT_VALUE = "The value you are trying to enter is not correct";
