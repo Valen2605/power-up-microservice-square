@@ -66,6 +66,6 @@ public class RestaurantRestController {
     public ResponseEntity<Map<String, String>> addEmployee(@Valid @RequestBody EmployeeRequestDto employeeRequestDto){
         restaurantHandler.addEmployee(employeeRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.RESTAURANT_CREATED_MESSAGE));
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.EMPLOYEE_ADDED_MESSAGE));
     }
 }
