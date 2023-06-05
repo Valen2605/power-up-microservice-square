@@ -34,16 +34,17 @@ public class RestaurantUseCase implements IRestaurantServicePort {
 
     private final IRestaurantRepository restaurantRepository;
 
+    private final EmployeeHttpAdapter employeeHttpAdapter;
+
     @Autowired
     private OwnerHttpAdapter ownerHttpAdapter;
 
-    @Autowired
-    private EmployeeHttpAdapter employeeHttpAdapter;
 
-    public RestaurantUseCase(IRestaurantPersistencePort restaurantPersistencePort, IEmployeePersistencePort employeePersistencePort, IRestaurantRepository restaurantRepository) {
+    public RestaurantUseCase(IRestaurantPersistencePort restaurantPersistencePort, IEmployeePersistencePort employeePersistencePort, IRestaurantRepository restaurantRepository, EmployeeHttpAdapter employeeHttpAdapter) {
         this.restaurantPersistencePort = restaurantPersistencePort;
         this.employeePersistencePort = employeePersistencePort;
         this.restaurantRepository = restaurantRepository;
+        this.employeeHttpAdapter = employeeHttpAdapter;
     }
 
     @Override
