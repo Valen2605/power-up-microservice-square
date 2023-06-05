@@ -1,9 +1,7 @@
 package com.pragma.powerup.squaremicroservice.adapters.driving.http.mapper;
 
 
-import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.response.DishResponseDto;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.response.EmployeeResponseDto;
-import com.pragma.powerup.squaremicroservice.domain.model.Dish;
 import com.pragma.powerup.squaremicroservice.domain.model.Employee;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

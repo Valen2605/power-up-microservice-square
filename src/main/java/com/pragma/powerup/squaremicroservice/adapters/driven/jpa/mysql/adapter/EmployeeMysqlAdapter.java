@@ -3,11 +3,8 @@ package com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.adapter;
 
 
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.EmployeeAlreadyExistsException;
-import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantAlreadyExistsException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.mappers.IEmployeeEntityMapper;
-import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.mappers.IRestaurantEntityMapper;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IEmployeeRepository;
-import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IRestaurantRepository;
 import com.pragma.powerup.squaremicroservice.domain.model.Employee;
 import com.pragma.powerup.squaremicroservice.domain.spi.IEmployeePersistencePort;
 import lombok.RequiredArgsConstructor;
