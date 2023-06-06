@@ -8,11 +8,16 @@ import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositor
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IRestaurantRepository;
 import com.pragma.powerup.squaremicroservice.configuration.security.Interceptor;
 import com.pragma.powerup.squaremicroservice.domain.api.IDishServicePort;
-
+import com.pragma.powerup.squaremicroservice.domain.exceptions.PageNotFoundException;
 import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotBeAOwnerException;
 import com.pragma.powerup.squaremicroservice.domain.model.Dish;
+import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
 import com.pragma.powerup.squaremicroservice.domain.spi.IDishPersistencePort;
+import com.pragma.powerup.squaremicroservice.domain.utility.Pagination;
 
+
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 public class DishUseCase implements IDishServicePort {
@@ -63,5 +68,16 @@ public class DishUseCase implements IDishServicePort {
         dishPersistencePort.enableDisableDish(id);
 
     }
+
+    @Override
+    public List<Dish> getDishes(int page, int pageSize) {
+        if (page>0){
+            List<Dish> dishes = dishPersistencePort.getDishes(page, pageSize);
+            dishes.sort(Comparator.comparing(Dish::getName));
+            return  Pagination.paginate(dishes, pageSize, page);
+        }
+        throw new PageNotFoundException();
+    }
+
 
 }

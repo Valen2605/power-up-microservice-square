@@ -46,10 +46,9 @@ public class BeanConfiguration {
     private final ICategoryRepository categoryRepository;
     private final ICategoryEntityMapper categoryEntityMapper;
 
-    private final EmployeeHttpAdapter employeeHttpAdapter;
     @Bean
     public IRestaurantServicePort restaurantServicePort() {
-        return new RestaurantUseCase(restaurantPersistencePort(), employeePersistencePort(), restaurantRepository, employeeHttpAdapter);
+        return new RestaurantUseCase(restaurantPersistencePort(), employeePersistencePort(), restaurantRepository);
     }
 
     @Bean

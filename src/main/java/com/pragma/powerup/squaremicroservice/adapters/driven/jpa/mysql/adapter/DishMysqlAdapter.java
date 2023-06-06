@@ -2,6 +2,7 @@ package com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.adapter;
 
 
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.DishEntity;
+import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.CategoryNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.DishAlreadyExistsException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.DishNotFoundException;
@@ -9,6 +10,7 @@ import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exception
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.mappers.IDishEntityMapper;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IDishRepository;
 import com.pragma.powerup.squaremicroservice.domain.model.Dish;
+import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
 import com.pragma.powerup.squaremicroservice.domain.spi.IDishPersistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,5 +61,15 @@ public class DishMysqlAdapter implements IDishPersistencePort {
         DishEntity dish = dishRepository.findById(id).orElseThrow(DishNotFoundException::new);
         dish.setActive(!dish.getActive());
             dishRepository.save(dish);
+    }
+
+    @Override
+    public List<Dish> getDishes(int page, int pageSize) {
+        List<DishEntity> dishEntities = dishRepository.findAll();
+        if (dishEntities.isEmpty()) {
+            throw new RestaurantNotFoundException();
+        }
+        return dishEntityMapper.toDishList(dishEntities);
+
     }
 }

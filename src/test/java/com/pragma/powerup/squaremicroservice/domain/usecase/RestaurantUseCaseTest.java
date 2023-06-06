@@ -59,7 +59,7 @@ class RestaurantUseCaseTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        restaurantUseCase = new RestaurantUseCase(restaurantPersistencePort,employeePersistencePort, restaurantRepository, employeeHttpAdapter);
+        restaurantUseCase = new RestaurantUseCase(restaurantPersistencePort,employeePersistencePort, restaurantRepository);
     }
 
 
