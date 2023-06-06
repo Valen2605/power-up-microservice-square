@@ -2,7 +2,6 @@ package com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.adapter;
 
 
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.DishEntity;
-import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.CategoryNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.DishAlreadyExistsException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.DishNotFoundException;
@@ -10,9 +9,11 @@ import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exception
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.mappers.IDishEntityMapper;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IDishRepository;
 import com.pragma.powerup.squaremicroservice.domain.model.Dish;
-import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
 import com.pragma.powerup.squaremicroservice.domain.spi.IDishPersistencePort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -64,12 +65,19 @@ public class DishMysqlAdapter implements IDishPersistencePort {
     }
 
     @Override
-    public List<Dish> getDishes(int page, int pageSize) {
-        List<DishEntity> dishEntities = dishRepository.findAll();
-        if (dishEntities.isEmpty()) {
-            throw new RestaurantNotFoundException();
-        }
-        return dishEntityMapper.toDishList(dishEntities);
+    public List<Dish> getDishes(Long idRestaurant, Long idCategory,int page, int pageSize) {
 
+        PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by("name").ascending());
+        Page<DishEntity> dishPage;
+        if(idCategory == 0L) {
+            dishPage = dishRepository.findAllByRestaurantEntityIdAndCategoryEntityId(idRestaurant,idCategory,pageRequest);
+            return dishEntityMapper.toDishList(dishPage.getContent());
+        }
+        if(idCategory > 0L){
+            dishPage = dishRepository.findAllByRestaurantEntityIdAndCategoryEntityId(idRestaurant, idCategory, pageRequest);
+            return dishEntityMapper.toDishList(dishPage.getContent());
+        }
+        throw new DishNotFoundException();
     }
 }
+

@@ -12,5 +12,4 @@ public class DishResponseDto {
     private Integer price;
     private Long idRestaurant;
     private String urlImage;
-    private Boolean active;
 }

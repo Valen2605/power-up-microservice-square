@@ -71,6 +71,17 @@ public class DishRestController {
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_UPDATED_MESSAGE));
     }
 
+    @Operation(summary = "Get Dishes",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = " All Dishes",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "404", description = "Restaurant not found ",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
+            })
+    @GetMapping("/dishes")
+    public ResponseEntity<List<DishResponseDto>> getDishes(@RequestParam Long idRestaurant, @RequestParam Long idCategory, @RequestParam int page, @RequestParam int size) {
 
+        return ResponseEntity.ok(dishHandler.getDishes(idRestaurant, idCategory,page, size));
+    }
 
 }

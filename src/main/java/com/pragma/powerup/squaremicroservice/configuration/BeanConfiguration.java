@@ -14,7 +14,6 @@ import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositor
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IDishRepository;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IEmployeeRepository;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IRestaurantRepository;
-import com.pragma.powerup.squaremicroservice.adapters.driving.http.adapter.EmployeeHttpAdapter;
 import com.pragma.powerup.squaremicroservice.domain.api.ICategoryServicePort;
 import com.pragma.powerup.squaremicroservice.domain.api.IDishServicePort;
 import com.pragma.powerup.squaremicroservice.domain.api.IRestaurantServicePort;

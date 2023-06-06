@@ -6,6 +6,7 @@ import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.response.
 
 import java.util.List;
 
+
 public interface IDishHandler {
     void saveDish(DishRequestDto dishRequestDto);
 
@@ -13,5 +14,5 @@ public interface IDishHandler {
 
     void enableDisableDish(Long id);
 
-    List<DishResponseDto> getDishes(int page, int pageSize);
+    List<DishResponseDto> getDishes(Long idRestaurant, Long idCategory, int page, int pageSize);
 }
