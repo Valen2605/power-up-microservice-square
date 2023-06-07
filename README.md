@@ -108,8 +108,14 @@ the domain layer and encapsulates the business logic and rules.
 ### Entry point Add Employee To Restaurant
 ![Image text](img/EntryPointAddEmployeeToRestaurant.jpg)
 
-### Exit point List Restaurants
+### Exit point Add Employee To Restaurant
 ![Image text](/img/ExitPointAddEmployeeToRestaurant.jpg)
+
+### Entry point List Dishes
+![Image text](img/EntryPointListDishes.jpg)
+
+### Exit point List Dishes
+![Image text](/img/ExitPointListDishes.jpg)
 
 
 ## Author ✒️
