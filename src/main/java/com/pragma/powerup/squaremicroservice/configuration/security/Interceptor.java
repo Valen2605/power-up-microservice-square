@@ -86,7 +86,7 @@ public class Interceptor implements HandlerInterceptor {
     }
 
     private boolean isAllowedAdminEndpoint(String requestURI) {
-        return requestURI.startsWith("/restaurant/createRestaurant/");
+        return requestURI.startsWith("/restaurant/createRestaurant");
     }
 
     private boolean isAllowedClientEndpoint(String requestURI) {

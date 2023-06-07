@@ -16,12 +16,12 @@ import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
 import com.pragma.powerup.squaremicroservice.domain.model.User;
 import com.pragma.powerup.squaremicroservice.domain.spi.IEmployeeHttpAdapterPersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.spi.IEmployeePersistencePort;
+import com.pragma.powerup.squaremicroservice.domain.spi.IOwnerHttpAdapterPersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.spi.IRestaurantPersistencePort;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestTemplate;
@@ -54,14 +54,58 @@ class RestaurantUseCaseTest {
     private IEmployeeHttpAdapterPersistencePort employeeHttpAdapterPersistencePort;
 
     @Mock
+    private IOwnerHttpAdapterPersistencePort ownerHttpAdapterPersistencePort;
+
+    @Mock
     private RestTemplate restTemplate;
 
     private RestaurantUseCase restaurantUseCase;
 
     @BeforeEach
     public void setUp() {
-        restaurantUseCase = new RestaurantUseCase(restaurantPersistencePort,employeePersistencePort, restaurantRepository, employeeHttpAdapterPersistencePort);
+        restaurantUseCase = new RestaurantUseCase(restaurantPersistencePort,employeePersistencePort, restaurantRepository, employeeHttpAdapterPersistencePort, ownerHttpAdapterPersistencePort);
         restTemplate = new RestTemplate();
+    }
+
+    @Test
+    void saveRestaurantValidUser() {
+        // Arrange
+        Long ownerId = 1L;
+        Restaurant restaurant = new Restaurant();
+        restaurant.setIdOwner(ownerId);
+
+        User user = new User();
+        user.setIdRole(Constants.OWNER_ROLE_ID);
+
+        when(ownerHttpAdapterPersistencePort.getOwner(ownerId)).thenReturn(user);
+
+        // Act
+        restaurantUseCase.saveRestaurant(restaurant);
+
+        // Assert
+        verify(ownerHttpAdapterPersistencePort, times(1)).getOwner(ownerId);
+        verify(restaurantPersistencePort, times(1)).saveRestaurant(restaurant);
+
+    }
+
+    @Test
+    void saveRestaurantInvalidUser() {
+        // Arrange
+        Long ownerId = 1L;
+        Restaurant restaurant = new Restaurant();
+        restaurant.setIdOwner(ownerId);
+
+        User user = new User();
+        user.setIdRole(6L);
+
+        when(ownerHttpAdapterPersistencePort.getOwner(ownerId)).thenReturn(user);
+
+        // Act & Assert
+        Assertions.assertThrows(UserNotBeAOwnerException.class, () -> {
+            restaurantUseCase.saveRestaurant(restaurant);
+        });
+
+        verify(ownerHttpAdapterPersistencePort, times(1)).getOwner(ownerId);
     }
 
 
@@ -156,18 +200,15 @@ class RestaurantUseCaseTest {
 
 
         when(restaurantRepository.findById(restaurantEntity.getId())).thenReturn(Optional.of(restaurantEntity));
-        when(employeeHttpAdapter.getEmployee(employeeRequestDto.getIdEmployee())).thenReturn(user);
+        when(employeeHttpAdapterPersistencePort.getEmployee(employeeRequestDto.getIdEmployee())).thenReturn(user);
         doNothing().when(employeePersistencePort).addEmployee(employee);
 
         // Act
         restaurantUseCase.addEmployee(employee);
 
-        // Assert
-        Assertions.assertDoesNotThrow(() -> {
-            restaurantUseCase.addEmployee(employee);
-        });
-        verify(employeeHttpAdapter, times(1)).getEmployee(idEmployee);
-        verify(employeePersistencePort, times(2)).addEmployee(employee);
+
+        verify(employeeHttpAdapterPersistencePort, times(1)).getEmployee(idEmployee);
+        verify(employeePersistencePort, times(1)).addEmployee(employee);
 
 
     }

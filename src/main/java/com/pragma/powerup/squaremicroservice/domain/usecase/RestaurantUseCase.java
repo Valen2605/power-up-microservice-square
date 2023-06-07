@@ -16,9 +16,9 @@ import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
 import com.pragma.powerup.squaremicroservice.domain.model.User;
 import com.pragma.powerup.squaremicroservice.domain.spi.IEmployeeHttpAdapterPersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.spi.IEmployeePersistencePort;
+import com.pragma.powerup.squaremicroservice.domain.spi.IOwnerHttpAdapterPersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.spi.IRestaurantPersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.utility.Pagination;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -36,24 +36,28 @@ public class RestaurantUseCase implements IRestaurantServicePort {
 
     private final IEmployeeHttpAdapterPersistencePort employeeHttpAdapterPersistencePort;
 
+    private final IOwnerHttpAdapterPersistencePort ownerHttpAdapterPersistencePort;
 
-    @Autowired
-    private OwnerHttpAdapter ownerHttpAdapter;
 
 
     public RestaurantUseCase(IRestaurantPersistencePort restaurantPersistencePort,
                              IEmployeePersistencePort employeePersistencePort,
-                             IRestaurantRepository restaurantRepository, IEmployeeHttpAdapterPersistencePort employeeHttpAdapterPersistencePort) {
+                             IRestaurantRepository restaurantRepository,
+                             IEmployeeHttpAdapterPersistencePort employeeHttpAdapterPersistencePort,
+                             IOwnerHttpAdapterPersistencePort ownerHttpAdapterPersistencePort) {
+
         this.restaurantPersistencePort = restaurantPersistencePort;
         this.employeePersistencePort = employeePersistencePort;
         this.restaurantRepository = restaurantRepository;
         this.employeeHttpAdapterPersistencePort = employeeHttpAdapterPersistencePort;
+        this.ownerHttpAdapterPersistencePort = ownerHttpAdapterPersistencePort;
     }
 
     @Override
     public void saveRestaurant(Restaurant restaurant){
         Long idOwner = restaurant.getIdOwner();
-        User user = ownerHttpAdapter.getOwner(idOwner);
+        User user = ownerHttpAdapterPersistencePort.getOwner(idOwner);
+
         if (!user.getIdRole().equals(Constants.OWNER_ROLE_ID)){
             throw new UserNotBeAOwnerException();
         }
