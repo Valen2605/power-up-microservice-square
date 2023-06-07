@@ -4,7 +4,6 @@ package com.pragma.powerup.squaremicroservice.domain.usecase;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IRestaurantRepository;
-import com.pragma.powerup.squaremicroservice.adapters.driving.http.adapter.EmployeeHttpAdapter;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.adapter.OwnerHttpAdapter;
 import com.pragma.powerup.squaremicroservice.configuration.Constants;
 import com.pragma.powerup.squaremicroservice.configuration.security.Interceptor;
@@ -15,6 +14,7 @@ import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotBeAOwnerEx
 import com.pragma.powerup.squaremicroservice.domain.model.Employee;
 import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
 import com.pragma.powerup.squaremicroservice.domain.model.User;
+import com.pragma.powerup.squaremicroservice.domain.spi.IEmployeeHttpAdapterPersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.spi.IEmployeePersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.spi.IRestaurantPersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.utility.Pagination;
@@ -34,17 +34,20 @@ public class RestaurantUseCase implements IRestaurantServicePort {
 
     private final IRestaurantRepository restaurantRepository;
 
-    @Autowired
-    private EmployeeHttpAdapter employeeHttpAdapter;
+    private final IEmployeeHttpAdapterPersistencePort employeeHttpAdapterPersistencePort;
+
 
     @Autowired
     private OwnerHttpAdapter ownerHttpAdapter;
 
 
-    public RestaurantUseCase(IRestaurantPersistencePort restaurantPersistencePort, IEmployeePersistencePort employeePersistencePort, IRestaurantRepository restaurantRepository) {
+    public RestaurantUseCase(IRestaurantPersistencePort restaurantPersistencePort,
+                             IEmployeePersistencePort employeePersistencePort,
+                             IRestaurantRepository restaurantRepository, IEmployeeHttpAdapterPersistencePort employeeHttpAdapterPersistencePort) {
         this.restaurantPersistencePort = restaurantPersistencePort;
         this.employeePersistencePort = employeePersistencePort;
         this.restaurantRepository = restaurantRepository;
+        this.employeeHttpAdapterPersistencePort = employeeHttpAdapterPersistencePort;
     }
 
     @Override
@@ -68,10 +71,10 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     }
 
     public void validateOwner(Long idRestaurant){
-        if(!restaurantRepository.findById(idRestaurant).isPresent()){
+        Optional<RestaurantEntity> restaurant = restaurantRepository.findById(idRestaurant);
+        if(restaurant.isEmpty()){
             throw new RestaurantNotFoundException();
         }
-        Optional<RestaurantEntity> restaurant = restaurantRepository.findById(idRestaurant);
         Long userId = Interceptor.getIdUser();
         if (!restaurant.get().getIdOwner().equals(userId)) {
             throw new UserNotBeAOwnerException();
@@ -82,7 +85,7 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     public void addEmployee(Employee employee) {
         validateOwner(employee.getIdRestaurant());
         Long idEmployee = employee.getIdEmployee();
-        User user = employeeHttpAdapter.getEmployee(idEmployee);
+        User user = employeeHttpAdapterPersistencePort.getEmployee(idEmployee);
         employee.setDniNumber(user.getDniNumber());
         if(!user.getIdRole().equals(Constants.EMPLOYEE_ROLE_ID)){
             throw new UserNotBeAEmployeeException();

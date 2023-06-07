@@ -11,5 +11,5 @@ public interface IDishPersistencePort {
 
     void enableDisableDish(Long id);
 
-    List<Dish> getDishes(int page, int pageSize);
+    List<Dish> getDishes(Long idRestaurant, Long idCategory, int page, int pageSize);
 }

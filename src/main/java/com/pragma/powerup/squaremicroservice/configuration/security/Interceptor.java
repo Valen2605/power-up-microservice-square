@@ -67,13 +67,21 @@ public class Interceptor implements HandlerInterceptor {
             return true;
         }
 
-        if (requestURI.startsWith("/dish/")) {
+        if (requestURI.startsWith("/dish/createDish")) {
             return true;
         }
 
-         if (requestURI.startsWith("/restaurant/employee")) {
+        if (requestURI.startsWith("/dish/updateDish/")) {
+             return true;
+        }
+
+         if (requestURI.startsWith("/dish/enableDisableDish/")) {
              return true;
          }
+
+        if (requestURI.startsWith("/restaurant/employee")) {
+             return true;
+        }
         return false;
     }
 
@@ -82,9 +90,19 @@ public class Interceptor implements HandlerInterceptor {
     }
 
     private boolean isAllowedClientEndpoint(String requestURI) {
-        return requestURI.startsWith("/restaurant/allRestaurants");
+
+        if(requestURI.startsWith("/restaurant/allRestaurants")){
+            return true;
+        }
+
+        if(requestURI.startsWith("/dish/dishes")){
+            return true;
+        }
+        return false;
+
 
     }
+
 
     public static String getToken(){
         return token;

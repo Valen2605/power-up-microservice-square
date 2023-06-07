@@ -36,8 +36,8 @@ public class DishHandlerImpl implements IDishHandler {
     }
 
     @Override
-    public List<DishResponseDto> getDishes(int page, int pageSize) {
-        return dishResponseMapper.toResponseList(dishServicePort. getDishes(page, pageSize));
+    public List<DishResponseDto> getDishes(Long idRestaurant, Long idCategory, int page, int pageSize) {
+        return dishResponseMapper.toResponseList(dishServicePort. getDishes(idRestaurant, idCategory,page, pageSize));
 
     }
 }

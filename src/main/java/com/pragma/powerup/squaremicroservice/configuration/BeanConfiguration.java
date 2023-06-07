@@ -18,10 +18,7 @@ import com.pragma.powerup.squaremicroservice.adapters.driving.http.adapter.Emplo
 import com.pragma.powerup.squaremicroservice.domain.api.ICategoryServicePort;
 import com.pragma.powerup.squaremicroservice.domain.api.IDishServicePort;
 import com.pragma.powerup.squaremicroservice.domain.api.IRestaurantServicePort;
-import com.pragma.powerup.squaremicroservice.domain.spi.ICategoryPersistencePort;
-import com.pragma.powerup.squaremicroservice.domain.spi.IDishPersistencePort;
-import com.pragma.powerup.squaremicroservice.domain.spi.IEmployeePersistencePort;
-import com.pragma.powerup.squaremicroservice.domain.spi.IRestaurantPersistencePort;
+import com.pragma.powerup.squaremicroservice.domain.spi.*;
 import com.pragma.powerup.squaremicroservice.domain.usecase.CategoryUseCase;
 import com.pragma.powerup.squaremicroservice.domain.usecase.DishUseCase;
 import com.pragma.powerup.squaremicroservice.domain.usecase.RestaurantUseCase;
@@ -46,11 +43,16 @@ public class BeanConfiguration {
     private final ICategoryRepository categoryRepository;
     private final ICategoryEntityMapper categoryEntityMapper;
 
+
     @Bean
     public IRestaurantServicePort restaurantServicePort() {
-        return new RestaurantUseCase(restaurantPersistencePort(), employeePersistencePort(), restaurantRepository);
+        return new RestaurantUseCase(restaurantPersistencePort(), employeePersistencePort(), restaurantRepository, employeeHttpAdapterPersistencePort());
     }
 
+    @Bean
+    public IEmployeeHttpAdapterPersistencePort employeeHttpAdapterPersistencePort() {
+        return new EmployeeHttpAdapter();
+    }
     @Bean
     public IDishServicePort dishServicePort() {
         return new DishUseCase(restaurantRepository, dishRepository, dishPersistencePort());

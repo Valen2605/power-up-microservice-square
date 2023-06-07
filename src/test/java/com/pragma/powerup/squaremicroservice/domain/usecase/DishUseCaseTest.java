@@ -18,6 +18,7 @@ import com.pragma.powerup.squaremicroservice.domain.spi.IRestaurantPersistencePo
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
@@ -221,6 +222,26 @@ class DishUseCaseTest {
         verify(dishRepository, times(1)).findById(id);
         verify(dishRepository, times(1)).save(dish);
         verify(dishPersistencePort, times(1)).enableDisableDish(id);
+    }
+
+    @Test
+    void testGetDishes() {
+        // Arrange
+        Long idRestaurant = 1L;
+        Long idCategory = 2L;
+        int page = 1;
+        int size = 10;
+
+        List<Dish> expectedDishes = new ArrayList<>();
+        expectedDishes.add(new Dish());
+        Mockito.when(dishPersistencePort.getDishes(idRestaurant, idCategory, page, size))
+                .thenReturn(expectedDishes);
+
+        // Act
+        List<Dish> actualDishes = dishUseCase.getDishes(idRestaurant, idCategory, page, size);
+
+        // Assert
+        assertEquals(expectedDishes, actualDishes);
     }
 
 
