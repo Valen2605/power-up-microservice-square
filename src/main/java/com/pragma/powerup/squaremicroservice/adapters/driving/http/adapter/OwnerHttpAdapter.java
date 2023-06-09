@@ -4,7 +4,6 @@ import com.pragma.powerup.squaremicroservice.configuration.security.Interceptor;
 import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotFoundException;
 import com.pragma.powerup.squaremicroservice.domain.model.User;
 import com.pragma.powerup.squaremicroservice.domain.spi.IOwnerHttpAdapterPersistencePort;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
