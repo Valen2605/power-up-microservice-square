@@ -7,15 +7,9 @@ import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.mappers.*
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.*;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.adapter.EmployeeHttpAdapter;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.adapter.OwnerHttpAdapter;
-import com.pragma.powerup.squaremicroservice.domain.api.ICategoryServicePort;
-import com.pragma.powerup.squaremicroservice.domain.api.IDishServicePort;
-import com.pragma.powerup.squaremicroservice.domain.api.IOrderServicePort;
-import com.pragma.powerup.squaremicroservice.domain.api.IRestaurantServicePort;
+import com.pragma.powerup.squaremicroservice.domain.api.*;
 import com.pragma.powerup.squaremicroservice.domain.spi.*;
-import com.pragma.powerup.squaremicroservice.domain.usecase.CategoryUseCase;
-import com.pragma.powerup.squaremicroservice.domain.usecase.DishUseCase;
-import com.pragma.powerup.squaremicroservice.domain.usecase.OrderUseCase;
-import com.pragma.powerup.squaremicroservice.domain.usecase.RestaurantUseCase;
+import com.pragma.powerup.squaremicroservice.domain.usecase.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,6 +33,9 @@ public class BeanConfiguration {
 
     private final IOrderRepository orderRepository;
     private final IOrderEntityMapper orderEntityMapper;
+
+    private final IOrderDishRepository orderDishRepository;
+    private final IOrderDishEntityMapper orderDishEntityMapper;
 
 
     @Bean
@@ -85,14 +82,22 @@ public class BeanConfiguration {
 
     @Bean
     public IOrderServicePort orderServicePort() {
-        return new OrderUseCase(orderRepository, orderPersistencePort());
+        return new OrderUseCase(orderRepository, orderPersistencePort(), restaurantPersistencePort());
+    }
+
+    @Bean
+    public IOrderDishServicePort orderDishServicePort(){
+        return new OrderDishUseCase(orderDishPersistencePort(), orderRepository, dishRepository);
     }
     @Bean
     public IOrderPersistencePort orderPersistencePort() {
         return new OrderMysqlAdapter(orderRepository, orderEntityMapper);
     }
 
-
+    @Bean
+    public IOrderDishPersistencePort orderDishPersistencePort(){
+        return new OrderDishMysqlAdapter(orderDishRepository, orderDishEntityMapper);
+    }
     @Bean
     public RestTemplate getRestTemplate() {
         return new RestTemplate();

@@ -6,13 +6,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface IDishRepository extends JpaRepository<DishEntity, Long> {
         List<DishEntity> findAll();
         List<DishEntity> findAllByRestaurantEntityId(Long idRestaurant);
         List<DishEntity> findAllByCategoryEntityId(Long idCategory);
-
         Page<DishEntity> findAllByRestaurantEntityIdAndCategoryEntityId(Long idRestaurantEntity, Long idCategoryEntity, Pageable pageable);
 
 }
