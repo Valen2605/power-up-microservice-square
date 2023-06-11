@@ -3,7 +3,6 @@ package com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.reposito
 
 
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.OrderDishEntity;
-import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
