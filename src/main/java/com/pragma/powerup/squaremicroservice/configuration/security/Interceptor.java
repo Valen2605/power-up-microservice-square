@@ -86,7 +86,7 @@ public class Interceptor implements HandlerInterceptor {
     }
 
     private boolean isAllowedAdminEndpoint(String requestURI) {
-        return requestURI.startsWith("/restaurant/createRestaurant/");
+        return requestURI.startsWith("/restaurant/createRestaurant");
     }
 
     private boolean isAllowedClientEndpoint(String requestURI) {
@@ -96,6 +96,14 @@ public class Interceptor implements HandlerInterceptor {
         }
 
         if(requestURI.startsWith("/dish/dishes")){
+            return true;
+        }
+
+        if(requestURI.startsWith("/order/createOrder")){
+            return true;
+        }
+
+        if(requestURI.startsWith("/order/orderDish")){
             return true;
         }
         return false;

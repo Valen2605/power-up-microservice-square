@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Transactional
@@ -37,5 +38,16 @@ public class RestaurantMysqlAdapter implements IRestaurantPersistencePort {
         return restaurantEntityMapper.toRestaurantList(restaurantEntities);
 
 
+    }
+
+    @Override
+    public Restaurant findById(Long id) {
+        Optional<RestaurantEntity> restaurantEntity = restaurantRepository.findById(id);
+        if(restaurantEntity.isPresent()) {
+            RestaurantEntity restaurant = restaurantEntity.get();
+            return new Restaurant(restaurant.getId(), restaurant.getName(), restaurant.getAddress(),
+                    restaurant.getPhone(), restaurant.getUrlLogo(), restaurant.getIdOwner(), restaurant.getDniNumber());
+        }
+        throw new RestaurantNotFoundException();
     }
 }

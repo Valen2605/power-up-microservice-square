@@ -24,6 +24,7 @@ public class Constants {
     public static final String DISH_CREATED_MESSAGE = "Dish has been successfully created";
     public static final String DISH_UPDATED_MESSAGE = "Dish has been successfully updated";
     public static final String DISH_NOT_FOUND_MESSAGE = "The dish you want to modify does not exist";
+    public static final String DISH_NOT_FOUND_IN_RESTAURANT_MESSAGE = "The dish you want to purchase does not exist";
     public static final String CATEGORY_CREATED_MESSAGE = "Category has been successfully created";
     public static final String RESTAURANT_ALREADY_EXISTS_MESSAGE = "There is already a restaurant associated with this identification number";
     public static final String EMPLOYEE_ALREADY_EXISTS_MESSAGE = "There is already a employee associated with this identification number";
@@ -35,6 +36,10 @@ public class Constants {
     public static final String PAGE_NOT_FOUND = "Page could not be found";
     public static final String INCORRECT_VALUE = "The value you are trying to enter is not correct";
     public static final String NOT_RESTAURANT_OWNER_MESSAGE = "The user is not the owner of the restaurant";
+    public static final String ORDER_CREATED_MESSAGE = "Order has been successfully created";
+    public static final String ORDERDISH_CREATED_MESSAGE = "OrderDish has been successfully created";
+    public static final String ORDER_NOT_CREATED = "You cannot create a purchase order if you already have one in progress";
+    public static final String ORDER_NOT_FOUND_MESSAGE = "No order found with the id provided";
     public static final String SWAGGER_TITLE_MESSAGE = "User API Pragma Power Up";
     public static final String SWAGGER_DESCRIPTION_MESSAGE = "User microservice";
     public static final String SWAGGER_VERSION_MESSAGE = "1.0.0";

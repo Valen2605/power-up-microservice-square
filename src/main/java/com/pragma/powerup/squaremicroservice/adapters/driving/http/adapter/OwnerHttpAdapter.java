@@ -3,7 +3,7 @@ package com.pragma.powerup.squaremicroservice.adapters.driving.http.adapter;
 import com.pragma.powerup.squaremicroservice.configuration.security.Interceptor;
 import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotFoundException;
 import com.pragma.powerup.squaremicroservice.domain.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.pragma.powerup.squaremicroservice.domain.spi.IOwnerHttpAdapterPersistencePort;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,17 +17,13 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class OwnerHttpAdapter {
+public class OwnerHttpAdapter implements IOwnerHttpAdapterPersistencePort {
 
-    private final RestTemplate restTemplate;
+    private RestTemplate restTemplate = new RestTemplate();
 
     @Value("${my.variables.url}")
     String url;
 
-    @Autowired
-    public OwnerHttpAdapter(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
 
     @CrossOrigin("*")
     @GetMapping("/{id}")

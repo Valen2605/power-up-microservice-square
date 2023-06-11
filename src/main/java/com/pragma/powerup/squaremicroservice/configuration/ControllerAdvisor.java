@@ -135,4 +135,23 @@ public class ControllerAdvisor {
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, INCORRECT_VALUE));
     }
 
+    @ExceptionHandler(OrderInProcessException.class)
+    public ResponseEntity<Map<String, String>> OrderInProcessException() {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_NOT_CREATED));
+    }
+
+    @ExceptionHandler(DishNotFoundInRestaurantException.class)
+    public ResponseEntity<Map<String, String>> DishNotFoundInRestaurantException() {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY,DISH_NOT_FOUND_IN_RESTAURANT_MESSAGE));
+    }
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleOrderNotFoundExceptionException(
+            OrderNotFoundException orderNotFoundException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_NOT_FOUND_MESSAGE));
+    }
+
 }
