@@ -35,7 +35,7 @@ class OrderDishUseCaseTest {
     }
 
     @Test
-    public void testSaveOrderDishOrderNotFound() {
+    void testSaveOrderDishOrderNotFound() {
         // Arrange
         Long idOrder = 123L;
         Mockito.when(orderRepository.findRestaurantById(idOrder)).thenReturn(new ArrayList<>());
@@ -47,7 +47,7 @@ class OrderDishUseCaseTest {
     }
 
     @Test
-    public void testSaveOrderDishWhenDishNotFoundInRestaurant() {
+    void testSaveOrderDishWhenDishNotFoundInRestaurant() {
         // Arrange
         Long idOrder = 123L;
         List<OrderEntity> idRestaurant = new ArrayList<>();
@@ -61,7 +61,7 @@ class OrderDishUseCaseTest {
     }
 
     @Test
-    public void testSaveOrderDishSuccess() {
+    void testSaveOrderDishSuccess() {
         // Arrange
         Long idOrder = 123L;
         List<OrderEntity> idRestaurant = new ArrayList<>();
