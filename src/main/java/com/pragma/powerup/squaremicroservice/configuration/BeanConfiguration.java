@@ -91,7 +91,7 @@ public class BeanConfiguration {
     }
     @Bean
     public IOrderPersistencePort orderPersistencePort() {
-        return new OrderMysqlAdapter(orderRepository, orderEntityMapper);
+        return new OrderMysqlAdapter(orderRepository, orderEntityMapper,restaurantRepository);
     }
 
     @Bean

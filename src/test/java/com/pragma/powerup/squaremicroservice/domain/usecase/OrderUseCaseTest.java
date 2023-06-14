@@ -1,66 +1,80 @@
 package com.pragma.powerup.squaremicroservice.domain.usecase;
 
+
+import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
+import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IOrderRepository;
 import com.pragma.powerup.squaremicroservice.configuration.security.Interceptor;
+import com.pragma.powerup.squaremicroservice.domain.exceptions.PageNotFoundException;
+import com.pragma.powerup.squaremicroservice.domain.model.Category;
+import com.pragma.powerup.squaremicroservice.domain.model.Dish;
 import com.pragma.powerup.squaremicroservice.domain.model.Order;
 import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
 import com.pragma.powerup.squaremicroservice.domain.spi.IOrderPersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.spi.IRestaurantPersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.utility.StatusEnum;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
+import static org.xmlunit.util.Linqy.any;
 
 class OrderUseCaseTest {
+
     private OrderUseCase orderUseCase;
 
     @Mock
     private IOrderPersistencePort orderPersistencePort;
-    @Mock
-    private IRestaurantPersistencePort restaurantPersistencePort;
-    @Mock
-    private Interceptor interceptor;
 
     @Mock
-    IOrderRepository orderRepository;
+    private IRestaurantPersistencePort restaurantPersistencePort;
+
+    @Mock
+    private IOrderRepository orderRepository;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        orderUseCase = new OrderUseCase(orderRepository,orderPersistencePort, restaurantPersistencePort);
+        orderUseCase = new OrderUseCase(orderRepository, orderPersistencePort, restaurantPersistencePort);
     }
 
     @Test
-    void saveOrderWhenOrderWithCorrectParameters() {
+    void getAllOrdersValidPage() {
         // Arrange
-        Long idRestaurant = 123L;
-        Long idUser = 456L;
-        Restaurant restaurant = new Restaurant();
-        when(restaurantPersistencePort.findById(idRestaurant)).thenReturn(restaurant);
-        when(interceptor.getIdUser()).thenReturn(456L);
+        int page = 1;
+        int pageSize = 3;
+        Long idRestaurant = 5L;
+        String status = StatusEnum.PENDIENTE.toString();
+
+        List<Order> orders = Arrays.asList(
+                new Order(13L, 2L, LocalDate.of(2023, 6, 14),"PENDIENTE",1L, new Restaurant(13L, "Mi Restaurante 1", "carrera 13 #12-12","456789","image.jpg",1L, "123456")),
+                new Order(14L, 3L,LocalDate.of(2023, 6, 14),"PENDIENTE",1L,new Restaurant(14L, "Mi Restaurante 2", "carrera 13 #12-12","456789","image.jpg",1L, "123456")),
+                new Order(15L, 4L,LocalDate.of(2023, 6, 14),"PENDIENTE",1L,new Restaurant(14L, "Mi Restaurante 2", "carrera 13 #12-12","456789","image.jpg",1L, "123456"))
+                );
+
+        when(orderPersistencePort.getOrders(status,idRestaurant,page,pageSize)).thenReturn(orders);
+
 
         // Act
-        orderUseCase.saveOrder(idRestaurant);
+        List<Order> result = orderPersistencePort.getOrders(status,idRestaurant,page,pageSize);
 
         // Assert
-        ArgumentCaptor<Order> orderCaptor = ArgumentCaptor.forClass(Order.class);
-        verify(orderPersistencePort).saveOrder(orderCaptor.capture());
-
-        Order savedOrder = orderCaptor.getValue();
-        assertEquals(idUser, savedOrder.getIdClient());
-        assertEquals(LocalDate.now(), savedOrder.getDate());
-        assertEquals(StatusEnum.PENDIENTE.toString(), savedOrder.getStatus());
-        assertEquals(restaurant, savedOrder.getRestaurant());
-
-        verify(restaurantPersistencePort).findById(idRestaurant);
-        verifyNoMoreInteractions(orderPersistencePort, restaurantPersistencePort);
+        verify(orderPersistencePort, times(1)).getOrders(status, idRestaurant,page, pageSize);
+        assertEquals(pageSize, result.size());
+        assertEquals("PENDIENTE", result.get(0).getStatus());
+        assertEquals("PENDIENTE", result.get(1).getStatus());
+        assertEquals("PENDIENTE", result.get(2).getStatus());
     }
 
 }
