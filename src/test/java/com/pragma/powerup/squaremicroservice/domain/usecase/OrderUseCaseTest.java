@@ -3,6 +3,7 @@ package com.pragma.powerup.squaremicroservice.domain.usecase;
 
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IEmployeeRepository;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IOrderRepository;
+import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotBeAEmployeeException;
 import com.pragma.powerup.squaremicroservice.domain.model.Order;
 import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
 import com.pragma.powerup.squaremicroservice.domain.spi.IEmployeeHttpAdapterPersistencePort;
@@ -19,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class OrderUseCaseTest {
@@ -70,6 +72,38 @@ class OrderUseCaseTest {
         assertEquals("PENDIENTE", result.get(0).getStatus());
         assertEquals("PENDIENTE", result.get(1).getStatus());
         assertEquals("PENDIENTE", result.get(2).getStatus());
+    }
+
+    @Test
+    void assignOrderWhenChefNotExists() {
+        // Arrange
+        Long id = 1L;
+        Order order = new Order();
+        order.setIdChef(2L);
+
+        when(employeeRepository.existsByIdEmployee(order.getIdChef())).thenReturn(false);
+
+        // Act and Assert
+        assertThrows(UserNotBeAEmployeeException.class, () -> orderUseCase.assignOrder(id, order));
+
+        // Verify
+        verify(orderPersistencePort, never()).assignOrder(anyLong(), any(Order.class));
+    }
+
+    @Test
+    void assignOrderWhenChefExists() {
+        // Arrange
+        Long id = 1L;
+        Order order = new Order();
+        order.setIdChef(2L);
+
+        when(employeeRepository.existsByIdEmployee(order.getIdChef())).thenReturn(true);
+
+        // Act
+        orderUseCase.assignOrder(id, order);
+
+        // Assert
+        verify(orderPersistencePort, times(1)).assignOrder(id, order);
     }
 
 }
