@@ -6,4 +6,6 @@ public enum StatusEnum {
     LISTO,
     ENTREGADO,
     CANCELADO;
+
+
 }

@@ -2,9 +2,11 @@ package com.pragma.powerup.squaremicroservice.adapters.driving.http.controller;
 
 
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.request.OrderDishRequestDto;
+import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.response.OrderResponseDto;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.handlers.IOrderDishHandler;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.handlers.IOrderHandler;
 import com.pragma.powerup.squaremicroservice.configuration.Constants;
+import com.pragma.powerup.squaremicroservice.domain.utility.StatusEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -36,7 +39,7 @@ public class OrderRestController {
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
             })
     @PostMapping("/createOrder")
-    public ResponseEntity<Map<String, String>> saveOrder(@Valid @RequestParam("idRestaurant") Long idRestaurant){
+    public ResponseEntity<Map<String, String>> saveOrder(@Valid Long idRestaurant){
         orderHandler.saveOrder(idRestaurant);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_CREATED_MESSAGE));
@@ -54,6 +57,19 @@ public class OrderRestController {
         orderDishHandler.saveOrderDish(orderDishRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDERDISH_CREATED_MESSAGE));
+    }
+
+
+    @Operation(summary = "Get Orders",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = " All Orders",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "404", description = "Restaurant not found ",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
+            })
+    @GetMapping("/orders")
+    public ResponseEntity<List<OrderResponseDto>> getOrders(@RequestParam StatusEnum status , @RequestParam Long idRestaurant, @RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(orderHandler.getOrders(status.toString(),idRestaurant,page, size));
     }
 
 

@@ -6,7 +6,7 @@ public class Order {
 
     private Long id;
     private Long idClient;
-    private LocalDate date;
+    private LocalDate dateOrder;
     private String status;
     private Long idChef;
     private Restaurant restaurant;
@@ -14,15 +14,14 @@ public class Order {
     public Order() {
     }
 
-    public Order(Long id, Long idClient, LocalDate date, String status, Long idChef, Restaurant restaurant) {
+    public Order(Long id, Long idClient, LocalDate dateOrder, String status, Long idChef, Restaurant restaurant) {
         this.id = id;
         this.idClient = idClient;
-        this.date = date;
+        this.dateOrder = dateOrder;
         this.status = status;
         this.idChef = idChef;
         this.restaurant = restaurant;
     }
-
 
     public Long getId() {
         return id;
@@ -40,12 +39,12 @@ public class Order {
         this.idClient = idClient;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDate getDateOrder() {
+        return dateOrder;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setDateOrder(LocalDate dateOrder) {
+        this.dateOrder = dateOrder;
     }
 
     public String getStatus() {

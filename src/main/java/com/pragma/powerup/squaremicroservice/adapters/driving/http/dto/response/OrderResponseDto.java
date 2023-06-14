@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Getter
 public class OrderResponseDto {
     private Long idClient;
-    private LocalDate date;
+    private LocalDate dateOrder;
     private String status;
     private Long idChef;
     private Long idRestaurant;

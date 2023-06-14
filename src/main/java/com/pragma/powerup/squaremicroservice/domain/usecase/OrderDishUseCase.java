@@ -4,6 +4,7 @@ import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.Di
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.DishNotFoundInRestaurantException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.OrderNotFoundException;
+import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IDishRepository;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IOrderRepository;
 import com.pragma.powerup.squaremicroservice.domain.api.IOrderDishServicePort;
@@ -31,23 +32,6 @@ public class OrderDishUseCase implements IOrderDishServicePort {
 
     @Override
     public void saveOrderDish(OrderDish orderDish) {
-        Long idOrder= orderDish.getOrder().getId();
-        List idRestaurant = orderRepository.findRestaurantById(idOrder);
-        Iterator<OrderEntity> it = idRestaurant.iterator();
-        Long restaurantId = it.next().getRestaurantEntity().getId();
-
-        List<DishEntity> dishes = dishRepository.findAllByRestaurantEntityId(restaurantId);
-
-        Optional<OrderEntity> orderEntity = orderRepository.findById(idOrder);
-
-        if(idRestaurant.isEmpty()){
-            throw  new OrderNotFoundException();
-        }
-
-        if(dishes.isEmpty()){
-           throw new DishNotFoundInRestaurantException();
-        }
-
         orderDishPersistencePort.saveOrderDish(orderDish);
     }
 }

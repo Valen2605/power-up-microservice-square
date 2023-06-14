@@ -20,7 +20,7 @@ public class OrderEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long idClient;
-    private LocalDate date;
+    private LocalDate dateOrder;
     private String status;
     private Long idChef;
     @ManyToOne

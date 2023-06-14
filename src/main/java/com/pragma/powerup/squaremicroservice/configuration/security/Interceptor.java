@@ -29,6 +29,9 @@ public class Interceptor implements HandlerInterceptor {
     @Value("${my.variables.owner}")
     String owner;
 
+    @Value("${my.variables.employee}")
+    String employee;
+
     @Value("${my.variables.client}")
     String client;
 
@@ -50,6 +53,10 @@ public class Interceptor implements HandlerInterceptor {
         }
 
         if (owner.equals(roleUser) && isAllowedOwnerEndpoint(request.getRequestURI())) {
+            return true;
+        }
+
+        if (employee.equals(roleUser) && isAllowedEmployeeEndpoint(request.getRequestURI())) {
             return true;
         }
 
@@ -87,6 +94,10 @@ public class Interceptor implements HandlerInterceptor {
 
     private boolean isAllowedAdminEndpoint(String requestURI) {
         return requestURI.startsWith("/restaurant/createRestaurant");
+    }
+
+    private boolean isAllowedEmployeeEndpoint(String requestURI) {
+        return requestURI.startsWith("/order/orders");
     }
 
     private boolean isAllowedClientEndpoint(String requestURI) {
