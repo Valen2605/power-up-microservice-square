@@ -97,7 +97,13 @@ public class Interceptor implements HandlerInterceptor {
     }
 
     private boolean isAllowedEmployeeEndpoint(String requestURI) {
-        return requestURI.startsWith("/order/orders");
+        if(requestURI.startsWith("/order/orders")) {
+            return true;
+        }
+        if(requestURI.startsWith("/order/assignOrder/")) {
+            return true;
+        }
+        return false;
     }
 
     private boolean isAllowedClientEndpoint(String requestURI) {

@@ -17,6 +17,9 @@ public class Employee {
         this.idRestaurant = idRestaurant;
     }
 
+    public Employee() {
+    }
+
     public Long getId() {
         return id;
     }

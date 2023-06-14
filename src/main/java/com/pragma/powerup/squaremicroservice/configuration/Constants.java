@@ -40,6 +40,7 @@ public class Constants {
     public static final String ORDERDISH_CREATED_MESSAGE = "OrderDish has been successfully created";
     public static final String ORDER_NOT_CREATED = "You cannot create a purchase order if you already have one in progress";
     public static final String ORDER_NOT_FOUND_MESSAGE = "No order found with the id provided";
+    public static final String ORDER_UPDATED_MESSAGE = "Order has been successfully updated";
     public static final String SWAGGER_TITLE_MESSAGE = "User API Pragma Power Up";
     public static final String SWAGGER_DESCRIPTION_MESSAGE = "User microservice";
     public static final String SWAGGER_VERSION_MESSAGE = "1.0.0";

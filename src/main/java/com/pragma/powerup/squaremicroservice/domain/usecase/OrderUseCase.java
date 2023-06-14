@@ -1,10 +1,13 @@
 package com.pragma.powerup.squaremicroservice.domain.usecase;
 
+import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IEmployeeRepository;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IOrderRepository;
 import com.pragma.powerup.squaremicroservice.configuration.security.Interceptor;
 import com.pragma.powerup.squaremicroservice.domain.api.IOrderServicePort;
+import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotBeAEmployeeException;
 import com.pragma.powerup.squaremicroservice.domain.model.Order;
 import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
+
 
 import com.pragma.powerup.squaremicroservice.domain.spi.IOrderPersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.spi.IRestaurantPersistencePort;
@@ -19,13 +22,17 @@ public class OrderUseCase implements IOrderServicePort {
 
     private final IOrderPersistencePort orderPersistencePort;
     private final IRestaurantPersistencePort restaurantPersistencePort;
+    private final IOrderRepository orderRepository;
+
+    private final IEmployeeRepository employeeRepository;
 
 
 
-    public OrderUseCase(IOrderRepository orderRepository, IOrderPersistencePort orderPersistencePort, IRestaurantPersistencePort restaurantPersistencePort) {
-
+    public OrderUseCase(IOrderRepository orderRepository, IOrderPersistencePort orderPersistencePort, IRestaurantPersistencePort restaurantPersistencePort, IEmployeeRepository employeeRepository) {
+        this.orderRepository = orderRepository;
         this.orderPersistencePort = orderPersistencePort;
         this.restaurantPersistencePort = restaurantPersistencePort;
+        this.employeeRepository = employeeRepository;
     }
 
 
@@ -39,6 +46,16 @@ public class OrderUseCase implements IOrderServicePort {
         order.setStatus(StatusEnum.PENDIENTE.toString());
         orderPersistencePort.saveOrder(order);
 
+    }
+
+    @Override
+    public void assignOrder(Long id, Order order) {
+
+        if(!employeeRepository.existsByIdEmployee(order.getIdChef())){
+            throw new UserNotBeAEmployeeException();
+        }
+
+        orderPersistencePort.assignOrder(id, order);
     }
 
     @Override
