@@ -135,6 +135,12 @@ the domain layer and encapsulates the business logic and rules.
 ### Exit point List Orders
 ![Image text](/img/ExitPointListOrders.jpg)
 
+### Entry point Assign an Order
+![Image text](img/EntryAssignOrder.jpg)
+
+### Exit point Assign an Order
+![Image text](/img/ExitPointAssignOrder.jpg)
+
 
 ## Author ✒️
 * **Valentina Santa Muñoz** 

@@ -38,7 +38,7 @@ class OrderDishUseCaseTest {
     void testSaveOrderDishOrderNotFound() {
         // Arrange
         Long idOrder = 123L;
-        Mockito.when(orderRepository.findRestaurantById(idOrder)).thenReturn(new ArrayList<>());
+        Mockito.when(orderRepository.findByRestaurantEntityId(idOrder)).thenReturn(new ArrayList<>());
 
         // Act & Assert
         assertThrows(OrderNotFoundException.class, () -> {
@@ -52,7 +52,7 @@ class OrderDishUseCaseTest {
         Long idOrder = 123L;
         List<OrderEntity> idRestaurant = new ArrayList<>();
         idRestaurant.add(new OrderEntity());
-        Mockito.when(orderRepository.findRestaurantById(idOrder)).thenReturn(idRestaurant);
+        Mockito.when(orderRepository.findByRestaurantEntityId(idOrder)).thenReturn(idRestaurant);
 
         // Act & Assert
         assertThrows(DishNotFoundInRestaurantException.class, () -> {
@@ -66,7 +66,7 @@ class OrderDishUseCaseTest {
         Long idOrder = 123L;
         List<OrderEntity> idRestaurant = new ArrayList<>();
         idRestaurant.add(new OrderEntity());
-        Mockito.when(orderRepository.findRestaurantById(idOrder)).thenReturn(idRestaurant);
+        Mockito.when(orderRepository.findByRestaurantEntityId(idOrder)).thenReturn(idRestaurant);
 
 
         // Act

@@ -11,6 +11,8 @@ public interface IEmployeeRepository extends JpaRepository<EmployeeRestaurantEnt
 
     Optional<EmployeeRestaurantEntity> findByDniNumber(String dniNumber);
 
+    boolean existsByIdEmployee(Long idEmployee);
+
     List<EmployeeRestaurantEntity> findAllById(Long idEmployee);
 
 }
