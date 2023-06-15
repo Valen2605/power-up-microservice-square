@@ -62,7 +62,6 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
     @Override
     public void assignOrder(Long id, Order order) {
         OrderEntity orderEntityUpdate = orderRepository.findById(id).orElseThrow(OrderNotFoundException::new);
-
         orderEntityUpdate.setStatus(StatusEnum.EN_PREPARACION.name());
         orderEntityUpdate.setIdChef(order.getIdChef());
         orderRepository.save(orderEntityUpdate);

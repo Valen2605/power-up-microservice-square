@@ -15,7 +15,7 @@ public interface IOrderRepository extends JpaRepository<OrderEntity, Long> {
 
         Optional<OrderEntity> findByIdClient(Long idClient);
 
-        List<OrderEntity> findRestaurantById(Long idOrder);
+        List<OrderEntity> findByRestaurantEntityId(Long idRestaurant);
 
         boolean existsByIdClient(Long idClient);
 
