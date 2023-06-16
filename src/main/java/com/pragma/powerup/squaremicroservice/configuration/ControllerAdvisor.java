@@ -154,4 +154,11 @@ public class ControllerAdvisor {
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_NOT_FOUND_MESSAGE));
     }
 
+    @ExceptionHandler(OrderIsNotPreparationException.class)
+    public ResponseEntity<Map<String, String>> handleOrderIsNotPreparationException(
+            OrderIsNotPreparationException orderIsNotPreparationException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_NOT_PREPARATION_MESSAGE));
+    }
+
 }

@@ -1,5 +1,8 @@
 package com.pragma.powerup.squaremicroservice.domain.usecase;
 
+import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
+import com.pragma.powerup.squaremicroservice.domain.exceptions.OrderIsNotPreparationException;
+import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.OrderNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IEmployeeRepository;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IOrderRepository;
 import com.pragma.powerup.squaremicroservice.configuration.security.Interceptor;
@@ -56,6 +59,18 @@ public class OrderUseCase implements IOrderServicePort {
         }
 
         orderPersistencePort.assignOrder(id, order);
+    }
+
+    @Override
+    public void updateOrderReady(Long id, StatusEnum status) {
+        String s = status.toString();
+        OrderEntity orderEntityReady = orderRepository.findByIdAndStatus(id,s).orElseThrow(OrderNotFoundException::new);
+        if(!orderEntityReady.getStatus().contains(StatusEnum.EN_PREPARACION.toString())) {
+            throw new OrderIsNotPreparationException();
+        }
+
+        orderEntityReady.setCodeOrder("4950");
+        orderPersistencePort.updateOrderReady(id, status);
     }
 
     @Override

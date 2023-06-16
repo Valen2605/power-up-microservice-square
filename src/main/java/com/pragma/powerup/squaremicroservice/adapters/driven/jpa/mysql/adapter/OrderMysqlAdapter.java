@@ -1,9 +1,7 @@
 package com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.adapter;
 
 
-import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.DishEntity;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
-import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.DishNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.OrderInProcessException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.OrderNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
@@ -65,6 +63,13 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
         orderEntityUpdate.setStatus(StatusEnum.EN_PREPARACION.name());
         orderEntityUpdate.setIdChef(order.getIdChef());
         orderRepository.save(orderEntityUpdate);
+    }
+
+    @Override
+    public void updateOrderReady(Long id, StatusEnum status) {
+        String s = status.toString();
+        OrderEntity orderEntityReady = orderRepository.findByIdAndStatus(id,s).orElseThrow(OrderNotFoundException::new);
+        orderRepository.save(orderEntityReady);
     }
 
     @Override
