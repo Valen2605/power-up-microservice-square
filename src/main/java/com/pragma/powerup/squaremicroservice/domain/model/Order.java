@@ -10,17 +10,19 @@ public class Order {
     private String status;
     private Long idChef;
     private Restaurant restaurant;
+    private String codeOrder;
 
     public Order() {
     }
 
-    public Order(Long id, Long idClient, LocalDate dateOrder, String status, Long idChef, Restaurant restaurant) {
+    public Order(Long id, Long idClient, LocalDate dateOrder, String status, Long idChef, Restaurant restaurant, String codeOrder) {
         this.id = id;
         this.idClient = idClient;
         this.dateOrder = dateOrder;
         this.status = status;
         this.idChef = idChef;
         this.restaurant = restaurant;
+        this.codeOrder = codeOrder;
     }
 
     public Long getId() {
@@ -69,5 +71,13 @@ public class Order {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public String getCodeOrder() {
+        return codeOrder;
+    }
+
+    public void setCodeOrder(String codeOrder) {
+        this.codeOrder = codeOrder;
     }
 }
