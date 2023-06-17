@@ -8,6 +8,7 @@ import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exception
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.mappers.IOrderEntityMapper;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IOrderRepository;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IRestaurantRepository;
+import com.pragma.powerup.squaremicroservice.domain.exceptions.OrderIsNotPreparationException;
 import com.pragma.powerup.squaremicroservice.domain.model.Order;
 import com.pragma.powerup.squaremicroservice.domain.spi.IOrderPersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.utility.StatusEnum;
@@ -71,6 +72,14 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
         OrderEntity orderEntityReady = orderRepository.findByIdAndStatus(id,s).orElseThrow(OrderNotFoundException::new);
         orderEntityReady.setStatus(StatusEnum.LISTO.toString());
         orderRepository.save(orderEntityReady);
+    }
+
+    @Override
+    public void updateOrderDelivered(Long id, StatusEnum status) {
+        String s = status.toString();
+        OrderEntity orderEntityDelivered = orderRepository.findByIdAndStatus(id,s).orElseThrow(OrderNotFoundException::new);
+        orderEntityDelivered.setStatus(StatusEnum.ENTREGADO.toString());
+        orderRepository.save(orderEntityDelivered);
     }
 
     @Override

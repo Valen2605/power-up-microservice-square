@@ -12,5 +12,7 @@ public interface IOrderPersistencePort {
 
     void updateOrderReady(Long id, StatusEnum status);
 
+    void updateOrderDelivered(Long id, StatusEnum status);
+
     List<Order> getOrders(String status, Long idRestaurant, int page, int pageSize);
 }

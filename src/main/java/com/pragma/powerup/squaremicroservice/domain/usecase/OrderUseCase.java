@@ -1,13 +1,12 @@
 package com.pragma.powerup.squaremicroservice.domain.usecase;
 
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
-import com.pragma.powerup.squaremicroservice.domain.exceptions.OrderIsNotPreparationException;
+import com.pragma.powerup.squaremicroservice.domain.exceptions.*;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.OrderNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IEmployeeRepository;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IOrderRepository;
 import com.pragma.powerup.squaremicroservice.configuration.security.Interceptor;
 import com.pragma.powerup.squaremicroservice.domain.api.IOrderServicePort;
-import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotBeAEmployeeException;
 import com.pragma.powerup.squaremicroservice.domain.model.Order;
 import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
 
@@ -87,6 +86,21 @@ public class OrderUseCase implements IOrderServicePort {
         String message = "Estimado cliente su pedido está listo su código es " + str;
         messagingTwilioHttpAdapterPersistencePort.getMessaging(message, phoneNumber);
         orderPersistencePort.updateOrderReady(id, status);
+    }
+
+    @Override
+    public void updateOrderDelivered(Long id, StatusEnum status,String codeOrder) {
+        String s = status.toString();
+        OrderEntity orderEntityDelivered = orderRepository.findByIdAndStatus(id,s).orElseThrow(OrderNotFoundException::new);
+
+        if(!orderEntityDelivered .getStatus().contains(StatusEnum.LISTO.toString())) {
+            throw new OrderIsNotReadyException();
+        }
+        if(!orderEntityDelivered.getCodeOrder().equals(codeOrder)){
+            throw new IncorrectCodeException();
+        }
+
+        orderPersistencePort.updateOrderDelivered(id, status);
     }
 
     @Override
