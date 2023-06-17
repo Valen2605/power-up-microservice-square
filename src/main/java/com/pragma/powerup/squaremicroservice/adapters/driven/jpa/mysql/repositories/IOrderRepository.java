@@ -2,6 +2,7 @@ package com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.reposito
 
 
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
+import com.pragma.powerup.squaremicroservice.domain.utility.StatusEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,6 +15,8 @@ public interface IOrderRepository extends JpaRepository<OrderEntity, Long> {
 
 
         Optional<OrderEntity> findByIdClient(Long idClient);
+
+        Optional<OrderEntity> findByIdAndStatus(Long id, String statusEnum);
 
         List<OrderEntity> findByRestaurantEntityId(Long idRestaurant);
 
