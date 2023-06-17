@@ -86,7 +86,6 @@ public class OrderUseCase implements IOrderServicePort {
 
         String message = "Estimado cliente su pedido está listo su código es " + str;
         messagingTwilioHttpAdapterPersistencePort.getMessaging(message, phoneNumber);
-
         orderPersistencePort.updateOrderReady(id, status);
     }
 

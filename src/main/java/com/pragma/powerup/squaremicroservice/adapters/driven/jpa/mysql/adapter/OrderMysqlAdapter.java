@@ -69,6 +69,7 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
     public void updateOrderReady(Long id, StatusEnum status) {
         String s = status.toString();
         OrderEntity orderEntityReady = orderRepository.findByIdAndStatus(id,s).orElseThrow(OrderNotFoundException::new);
+        orderEntityReady.setStatus(StatusEnum.LISTO.toString());
         orderRepository.save(orderEntityReady);
     }
 
