@@ -1,11 +1,13 @@
 package com.pragma.powerup.squaremicroservice.domain.usecase;
 
 
+import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IEmployeeRepository;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IOrderRepository;
 import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotBeAEmployeeException;
 import com.pragma.powerup.squaremicroservice.domain.model.Order;
 import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
+import com.pragma.powerup.squaremicroservice.domain.model.User;
 import com.pragma.powerup.squaremicroservice.domain.spi.IClientHttpAdapterPersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.spi.IMessagingTwilioHttpAdapterPersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.spi.IOrderPersistencePort;
@@ -20,6 +22,8 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -49,8 +53,6 @@ class OrderUseCaseTest {
 
     @Mock
     private RestTemplate restTemplate;
-
-
 
 
     @BeforeEach
@@ -121,6 +123,31 @@ class OrderUseCaseTest {
     }
 
 
+    @Test
+    public void testUpdateOrderReady() {
+        // Arrange
+        Long id = 1L;
+        StatusEnum status = StatusEnum.EN_PREPARACION;
 
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setId(id);
+        orderEntity.setStatus(status.toString());
+        orderEntity.setIdClient(2L);
+
+        User user = new User();
+        user.setPhone("1234567890");
+
+        when(orderRepository.findByIdAndStatus(id, status.toString())).thenReturn(Optional.of(orderEntity));
+        when(clientHttpAdapterPersistencePort.getClient(orderEntity.getIdClient())).thenReturn(user);
+
+        // Act
+        orderUseCase.updateOrderReady(id, status);
+
+        // Assert
+        verify(orderRepository).findByIdAndStatus(id, status.toString());
+        verify(clientHttpAdapterPersistencePort).getClient(orderEntity.getIdClient());
+        verify(messagingTwilioHttpAdapterPersistencePort).getMessaging(anyString(), eq(user.getPhone()));
+        verify(orderPersistencePort).updateOrderReady(id, status);
+    }
 
 }
