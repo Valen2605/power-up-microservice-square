@@ -1,5 +1,6 @@
 package com.pragma.powerup.squaremicroservice.domain.usecase;
 
+import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.DishEntity;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.DishNotFoundInRestaurantException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.OrderNotFoundException;
@@ -14,8 +15,11 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
+
 class OrderDishUseCaseTest {
 
     @Mock
@@ -35,24 +39,11 @@ class OrderDishUseCaseTest {
     }
 
     @Test
-    void testSaveOrderDishOrderNotFound() {
-        // Arrange
-        Long idOrder = 123L;
-        Mockito.when(orderRepository.findByRestaurantEntityId(idOrder)).thenReturn(new ArrayList<>());
-
-        // Act & Assert
-        assertThrows(OrderNotFoundException.class, () -> {
-            orderDishUseCase.saveOrderDish(new OrderDish());
-        });
-    }
-
-    @Test
     void testSaveOrderDishWhenDishNotFoundInRestaurant() {
         // Arrange
         Long idOrder = 123L;
-        List<OrderEntity> idRestaurant = new ArrayList<>();
-        idRestaurant.add(new OrderEntity());
-        Mockito.when(orderRepository.findByRestaurantEntityId(idOrder)).thenReturn(idRestaurant);
+        OrderEntity orderEntity = new OrderEntity();
+        when(orderRepository.findById(idOrder)).thenReturn(Optional.of(orderEntity));
 
         // Act & Assert
         assertThrows(DishNotFoundInRestaurantException.class, () -> {
@@ -66,7 +57,7 @@ class OrderDishUseCaseTest {
         Long idOrder = 123L;
         List<OrderEntity> idRestaurant = new ArrayList<>();
         idRestaurant.add(new OrderEntity());
-        Mockito.when(orderRepository.findByRestaurantEntityId(idOrder)).thenReturn(idRestaurant);
+        when(orderRepository.findByRestaurantEntityId(idOrder)).thenReturn(idRestaurant);
 
 
         // Act

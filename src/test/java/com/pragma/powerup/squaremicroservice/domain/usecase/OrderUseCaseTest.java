@@ -2,8 +2,12 @@ package com.pragma.powerup.squaremicroservice.domain.usecase;
 
 
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
+import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.OrderNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IEmployeeRepository;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IOrderRepository;
+import com.pragma.powerup.squaremicroservice.domain.exceptions.IncorrectCodeException;
+import com.pragma.powerup.squaremicroservice.domain.exceptions.OrderIsNotReadyException;
+import com.pragma.powerup.squaremicroservice.domain.exceptions.PageNotFoundException;
 import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotBeAEmployeeException;
 import com.pragma.powerup.squaremicroservice.domain.model.Order;
 import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
@@ -13,6 +17,7 @@ import com.pragma.powerup.squaremicroservice.domain.spi.IMessagingTwilioHttpAdap
 import com.pragma.powerup.squaremicroservice.domain.spi.IOrderPersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.spi.IRestaurantPersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.utility.StatusEnum;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -25,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -124,7 +130,7 @@ class OrderUseCaseTest {
 
 
     @Test
-    public void testUpdateOrderReady() {
+    void testUpdateOrderReady() {
         // Arrange
         Long id = 1L;
         StatusEnum status = StatusEnum.EN_PREPARACION;
@@ -148,6 +154,80 @@ class OrderUseCaseTest {
         verify(clientHttpAdapterPersistencePort).getClient(orderEntity.getIdClient());
         verify(messagingTwilioHttpAdapterPersistencePort).getMessaging(anyString(), eq(user.getPhone()));
         verify(orderPersistencePort).updateOrderReady(id, status);
+    }
+
+
+    @Test
+    void testUpdateOrderDeliveredValidData() {
+        // Arrange
+        Long id = 1L;
+        StatusEnum status = StatusEnum.ENTREGADO;
+        String codeOrder = "ABC123";
+
+        OrderEntity orderEntity = new OrderEntity();
+
+        orderEntity.setStatus(StatusEnum.LISTO.toString());
+
+        orderEntity.setCodeOrder(codeOrder);
+
+        when(orderRepository.findByIdAndStatus(id, status.toString())).thenReturn(Optional.of(orderEntity));
+
+        // Act
+        orderUseCase.updateOrderDelivered(id, status, codeOrder);
+
+        // Assert
+        verify(orderPersistencePort, times(1)).updateOrderDelivered(id, status);
+    }
+
+    @Test
+    void testUpdateOrderDeliveredNotExistingOrder() {
+        // Arrange
+        Long id = 1L;
+        StatusEnum status = StatusEnum.ENTREGADO;
+        String codeOrder = "ABC123";
+
+        when(orderRepository.findByIdAndStatus(id, status.toString())).thenReturn(Optional.empty());
+
+        // Act & Assert
+        Assertions.assertThrows(OrderNotFoundException.class, () -> {
+            orderUseCase.updateOrderDelivered(id, status, codeOrder);
+        });
+    }
+
+    @Test
+    void testUpdateOrderDeliveredOrderNotReady() {
+        // Arrange
+        Long id = 1L;
+        StatusEnum status = StatusEnum.PENDIENTE;
+        String codeOrder = "ABC123";
+
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setStatus(status.toString());
+
+        when(orderRepository.findByIdAndStatus(id, status.toString())).thenReturn(Optional.of(orderEntity));
+
+        // Act & Assert
+        Assertions.assertThrows(OrderIsNotReadyException.class, () -> {
+            orderUseCase.updateOrderDelivered(id, status, codeOrder);
+        });
+    }
+
+    @Test
+    void testUpdateOrderDeliveredIncorrectCode() {
+        // Arrange
+        Long id = 1L;
+        StatusEnum status = StatusEnum.ENTREGADO;
+        String codeOrder = "ABC123";
+
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setStatus(StatusEnum.LISTO.toString());
+        orderEntity.setCodeOrder(codeOrder);
+        when(orderRepository.findByIdAndStatus(id, status.toString())).thenReturn(Optional.of(orderEntity));
+
+        // Act & Assert
+        Assertions.assertThrows(IncorrectCodeException.class, () -> {
+            orderUseCase.updateOrderDelivered(id, status, "XYZ789");
+        });
     }
 
 }
