@@ -3,7 +3,6 @@ package com.pragma.powerup.squaremicroservice.adapters.driving.http.controller;
 
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.request.DishUpdateRequestDto;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.request.OrderDishRequestDto;
-import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.request.OrderReadyRequestDto;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.request.OrderUpdateRequestDto;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.response.OrderResponseDto;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.handlers.IOrderDishHandler;

@@ -1,8 +1,6 @@
 package com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.adapter;
 
-import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.DishNotFoundException;
-import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.OrderNotFoundException;
-import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
+
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.mappers.IOrderDishEntityMapper;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IOrderDishRepository;
 import com.pragma.powerup.squaremicroservice.domain.model.OrderDish;
