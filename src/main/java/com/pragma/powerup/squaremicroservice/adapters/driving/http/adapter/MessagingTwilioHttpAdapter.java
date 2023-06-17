@@ -2,15 +2,10 @@ package com.pragma.powerup.squaremicroservice.adapters.driving.http.adapter;
 
 import com.pragma.powerup.squaremicroservice.configuration.security.Interceptor;
 import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotFoundException;
-import com.pragma.powerup.squaremicroservice.domain.model.User;
-import com.pragma.powerup.squaremicroservice.domain.spi.IClientHttpAdapterPersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.spi.IMessagingTwilioHttpAdapterPersistencePort;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 

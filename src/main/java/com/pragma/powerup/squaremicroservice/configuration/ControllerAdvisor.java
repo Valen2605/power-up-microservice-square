@@ -161,4 +161,18 @@ public class ControllerAdvisor {
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_NOT_PREPARATION_MESSAGE));
     }
 
+    @ExceptionHandler(OrderIsNotReadyException.class)
+    public ResponseEntity<Map<String, String>> handleOrderIsNotReadyException(
+            OrderIsNotReadyException orderIsNotReadyException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_NOT_READY_MESSAGE));
+    }
+
+    @ExceptionHandler(IncorrectCodeException.class)
+    public ResponseEntity<Map<String, String>> handleIncorrectCodeException(
+            IncorrectCodeException incorrectCodeException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, INCORRECT_CODE_MESSAGE));
+    }
+
 }

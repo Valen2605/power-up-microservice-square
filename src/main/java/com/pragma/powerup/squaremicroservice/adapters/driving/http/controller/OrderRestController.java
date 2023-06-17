@@ -3,7 +3,6 @@ package com.pragma.powerup.squaremicroservice.adapters.driving.http.controller;
 
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.request.DishUpdateRequestDto;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.request.OrderDishRequestDto;
-import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.request.OrderReadyRequestDto;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.request.OrderUpdateRequestDto;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.response.OrderResponseDto;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.handlers.IOrderDishHandler;
@@ -91,7 +90,7 @@ public class OrderRestController {
 
     @Operation(summary = "Update Order Ready",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Dish Updated",
+                    @ApiResponse(responseCode = "200", description = "Order Updated",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = DishUpdateRequestDto.class))),
                     @ApiResponse(responseCode = "404", description = "Order not found",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
@@ -101,6 +100,20 @@ public class OrderRestController {
         orderHandler.updateOrderReady(id,status);
         return ResponseEntity.ok()
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_READY_MESSAGE));
+    }
+
+    @Operation(summary = "Update Order Ready",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Order Updated",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = DishUpdateRequestDto.class))),
+                    @ApiResponse(responseCode = "404", description = "Order not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
+            })
+    @PatchMapping("/orderDelivered/{id}/{status}")
+    public ResponseEntity<Map<String, String>> updateOrderDelivered(@PathVariable Long id, StatusEnum status, String codeOrder) {
+        orderHandler.updateOrderDelivered(id,status, codeOrder);
+        return ResponseEntity.ok()
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_DELIVERED_MESSAGE));
     }
 
 
