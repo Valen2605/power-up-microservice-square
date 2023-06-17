@@ -5,7 +5,9 @@ package com.pragma.powerup.squaremicroservice.configuration;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.adapter.*;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.mappers.*;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.*;
+import com.pragma.powerup.squaremicroservice.adapters.driving.http.adapter.ClientHttpAdapter;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.adapter.EmployeeHttpAdapter;
+import com.pragma.powerup.squaremicroservice.adapters.driving.http.adapter.MessagingTwilioHttpAdapter;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.adapter.OwnerHttpAdapter;
 import com.pragma.powerup.squaremicroservice.domain.api.*;
 import com.pragma.powerup.squaremicroservice.domain.spi.*;
@@ -56,6 +58,15 @@ public class BeanConfiguration {
         return new OwnerHttpAdapter();
     }
     @Bean
+    public IClientHttpAdapterPersistencePort clientHttpAdapterPersistencePort() {
+        return new ClientHttpAdapter();
+    }
+
+    @Bean
+    public IMessagingTwilioHttpAdapterPersistencePort messagingTwilioHttpAdapterPersistencePort() {
+        return new MessagingTwilioHttpAdapter();
+    }
+    @Bean
     public IDishServicePort dishServicePort() {
         return new DishUseCase(restaurantRepository, dishRepository, dishPersistencePort());
     }
@@ -83,7 +94,7 @@ public class BeanConfiguration {
 
     @Bean
     public IOrderServicePort orderServicePort() {
-        return new OrderUseCase(orderRepository, orderPersistencePort(), restaurantPersistencePort(), employeeRepository);
+        return new OrderUseCase(orderRepository, orderPersistencePort(), restaurantPersistencePort(), employeeRepository, clientHttpAdapterPersistencePort(), messagingTwilioHttpAdapterPersistencePort());
     }
 
     @Bean

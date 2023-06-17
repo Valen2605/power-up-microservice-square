@@ -6,7 +6,8 @@ import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositor
 import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotBeAEmployeeException;
 import com.pragma.powerup.squaremicroservice.domain.model.Order;
 import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
-import com.pragma.powerup.squaremicroservice.domain.spi.IEmployeeHttpAdapterPersistencePort;
+import com.pragma.powerup.squaremicroservice.domain.spi.IClientHttpAdapterPersistencePort;
+import com.pragma.powerup.squaremicroservice.domain.spi.IMessagingTwilioHttpAdapterPersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.spi.IOrderPersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.spi.IRestaurantPersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.utility.StatusEnum;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -39,11 +41,23 @@ class OrderUseCaseTest {
     @Mock
     private IEmployeeRepository employeeRepository;
 
+    @Mock
+    private IClientHttpAdapterPersistencePort clientHttpAdapterPersistencePort;
+
+    @Mock
+    private IMessagingTwilioHttpAdapterPersistencePort messagingTwilioHttpAdapterPersistencePort;
+
+    @Mock
+    private RestTemplate restTemplate;
+
+
+
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        orderUseCase = new OrderUseCase(orderRepository, orderPersistencePort, restaurantPersistencePort, employeeRepository);
+        orderUseCase = new OrderUseCase(orderRepository, orderPersistencePort, restaurantPersistencePort, employeeRepository, clientHttpAdapterPersistencePort, messagingTwilioHttpAdapterPersistencePort);
+        restTemplate = new RestTemplate();
     }
 
     @Test

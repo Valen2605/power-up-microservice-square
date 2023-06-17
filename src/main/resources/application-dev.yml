@@ -23,6 +23,7 @@ my:
     owner: "ROLE_OWNER"
     employee: "ROLE_EMPLOYEE"
     client: "ROLE_CUSTOMER"
+    uri: "http://localhost:8092/messaging/sendMessage/"
 
 
 
