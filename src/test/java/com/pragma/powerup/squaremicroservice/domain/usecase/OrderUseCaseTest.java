@@ -5,10 +5,7 @@ import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.Or
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.OrderNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IEmployeeRepository;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IOrderRepository;
-import com.pragma.powerup.squaremicroservice.domain.exceptions.IncorrectCodeException;
-import com.pragma.powerup.squaremicroservice.domain.exceptions.OrderIsNotReadyException;
-import com.pragma.powerup.squaremicroservice.domain.exceptions.PageNotFoundException;
-import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotBeAEmployeeException;
+import com.pragma.powerup.squaremicroservice.domain.exceptions.*;
 import com.pragma.powerup.squaremicroservice.domain.model.Order;
 import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
 import com.pragma.powerup.squaremicroservice.domain.model.User;
@@ -228,6 +225,83 @@ class OrderUseCaseTest {
         Assertions.assertThrows(IncorrectCodeException.class, () -> {
             orderUseCase.updateOrderDelivered(id, status, "XYZ789");
         });
+    }
+
+
+    @Test
+    void updateOrderCanceledOrderNotFoundException() {
+        // Arrange
+        Long orderId = 1L;
+        StatusEnum status = StatusEnum.CANCELADO;
+
+        when(orderRepository.findByIdAndStatus(anyLong(), anyString()))
+                .thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(OrderNotFoundException.class,
+                () -> orderUseCase.updateOrderCanceled(orderId, status));
+    }
+
+
+    @Test
+    void updateOrderCanceledOrderIsInPreparationOrReadyOrDelivered() {
+        // Arrange
+        Long orderId = 1L;
+        StatusEnum status = StatusEnum.CANCELADO;
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setStatus(StatusEnum.EN_PREPARACION.toString());
+        orderEntity.setIdClient(1L);
+
+        User user = new User();
+        user.setPhone("1234567890");
+
+        when(orderRepository.findByIdAndStatus(anyLong(), anyString()))
+                .thenReturn(Optional.of(orderEntity));
+
+        when(clientHttpAdapterPersistencePort.getClient(orderEntity.getIdClient())).thenReturn(user);
+
+        // Act & Assert
+        assertThrows(OrderNotCanceledException.class,
+                () -> orderUseCase.updateOrderCanceled(orderId, status));
+
+        verify(messagingTwilioHttpAdapterPersistencePort).getMessaging(eq("Lo sentimos, tu pedido ya está en preparación y no puede cancelarse"),
+                eq("1234567890"));
+    }
+
+
+    @Test
+    void updateOrderCanceledwhenOrderIsAlreadyCancelled() {
+        // Arrange
+        Long orderId = 1L;
+        StatusEnum status = StatusEnum.CANCELADO;
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setStatus(StatusEnum.CANCELADO.toString());
+
+        when(orderRepository.findByIdAndStatus(anyLong(), anyString()))
+                .thenReturn(Optional.of(orderEntity));
+
+        // Act & Assert
+        assertThrows(OrderAlreadyCancelledException.class,
+                () -> orderUseCase.updateOrderCanceled(orderId, status));
+    }
+
+    @Test
+    void updateOrderCanceledwhenOrderCanBeCancelled() {
+        // Arrange
+        Long orderId = 1L;
+        StatusEnum status = StatusEnum.CANCELADO;
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setStatus(StatusEnum.PENDIENTE.toString());
+
+        when(orderRepository.findByIdAndStatus(anyLong(), anyString()))
+                .thenReturn(Optional.of(orderEntity));
+
+        // Act
+        orderUseCase.updateOrderCanceled(orderId, status);
+
+        // Assert
+        verify(orderPersistencePort,times(1)).updateOrderCanceled(orderId,status);
+        assertEquals(orderEntity.getStatus().toString(),"PENDIENTE");
     }
 
 }
