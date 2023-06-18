@@ -1,6 +1,7 @@
 package com.pragma.powerup.squaremicroservice.domain.usecase;
 
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
+import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.OrderInProcessException;
 import com.pragma.powerup.squaremicroservice.domain.exceptions.*;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.OrderNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IEmployeeRepository;
@@ -106,6 +107,31 @@ public class OrderUseCase implements IOrderServicePort {
     @Override
     public List<Order> getOrders(String status, Long idRestaurant, int page, int pageSize) {
         return orderPersistencePort.getOrders(status, idRestaurant, page, pageSize);
+    }
+
+    @Override
+    public void updateOrderCanceled(Long id, StatusEnum status) {
+        String s = status.toString();
+        OrderEntity orderEntityCanceled = orderRepository.findByIdAndStatus(id,s).orElseThrow(OrderNotFoundException::new);
+
+        if(orderEntityCanceled.getStatus().contains(StatusEnum.EN_PREPARACION.toString())
+            || orderEntityCanceled.getStatus().contains(StatusEnum.LISTO.toString())
+            || orderEntityCanceled.getStatus().contains(StatusEnum.ENTREGADO.toString())){
+
+            Long idClient = orderEntityCanceled.getIdClient();
+            User user = clientHttpAdapterPersistencePort.getClient(idClient);
+            String phoneNumber = user.getPhone();
+
+            String message = "Lo sentimos, tu pedido ya está en preparación y no puede cancelarse";
+            messagingTwilioHttpAdapterPersistencePort.getMessaging(message, phoneNumber);
+
+            throw new OrderNotCanceledException();
+        }
+
+        if(orderEntityCanceled.getStatus().contains(StatusEnum.CANCELADO.toString())){
+            throw new OrderAlreadyCancelledException();
+        }
+          orderPersistencePort.updateOrderCanceled(id, status);
     }
 
     public static String randomCharacters(Integer lenght) {

@@ -46,6 +46,9 @@ public class Constants {
     public static final String ORDER_NOT_READY_MESSAGE = "The order is not ready";
     public static final String ORDER_DELIVERED_MESSAGE = "The order has been successfully delivered";
     public static final String INCORRECT_CODE_MESSAGE = "The code is not correct";
+    public static final String ORDER_CANCELED_MESSAGE = "The order has been successfully cancelled";
+    public static final String ORDER_NOT_CANCELED_MESSAGE = "Order could not be cancelled";
+    public static final String ORDER_ALREADY_CANCELED_MESSAGE = "The order is already cancelled";
     public static final String SWAGGER_TITLE_MESSAGE = "User API Pragma Power Up";
     public static final String SWAGGER_DESCRIPTION_MESSAGE = "User microservice";
     public static final String SWAGGER_VERSION_MESSAGE = "1.0.0";

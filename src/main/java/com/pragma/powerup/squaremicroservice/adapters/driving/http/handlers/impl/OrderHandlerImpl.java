@@ -47,4 +47,9 @@ public class OrderHandlerImpl implements IOrderHandler {
         orderServicePort.updateOrderDelivered(id,status,codeOrder);
     }
 
+    @Override
+    public void updateOrderCanceled(Long id, StatusEnum status) {
+        orderServicePort.updateOrderCanceled(id,status);
+    }
+
 }

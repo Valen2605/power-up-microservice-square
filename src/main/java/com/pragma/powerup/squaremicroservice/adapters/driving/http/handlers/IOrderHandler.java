@@ -16,4 +16,6 @@ public interface IOrderHandler {
     void updateOrderReady(Long id, StatusEnum status);
 
     void updateOrderDelivered(Long id, StatusEnum status, String codeOrder);
+
+    void updateOrderCanceled(Long id, StatusEnum status);
 }

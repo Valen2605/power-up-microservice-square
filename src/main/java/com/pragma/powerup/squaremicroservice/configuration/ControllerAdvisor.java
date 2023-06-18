@@ -175,4 +175,18 @@ public class ControllerAdvisor {
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, INCORRECT_CODE_MESSAGE));
     }
 
+    @ExceptionHandler(OrderAlreadyCancelledException.class)
+    public ResponseEntity<Map<String, String>> handleOrderAlreadyCancelledException(
+            OrderAlreadyCancelledException orderAlreadyCancelledException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_ALREADY_CANCELED_MESSAGE));
+    }
+
+    @ExceptionHandler(OrderNotCanceledException.class)
+    public ResponseEntity<Map<String, String>> handleOrderNotCanceledException(
+            OrderNotCanceledException orderNotCanceledException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_NOT_CANCELED_MESSAGE));
+    }
+
 }

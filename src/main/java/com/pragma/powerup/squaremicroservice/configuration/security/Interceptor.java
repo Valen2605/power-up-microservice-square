@@ -131,6 +131,10 @@ public class Interceptor implements HandlerInterceptor {
         if(requestURI.startsWith("/order/orderDish")){
             return true;
         }
+
+        if(requestURI.startsWith("/order/orderCanceled/")){
+            return true;
+        }
         return false;
 
 
