@@ -15,5 +15,8 @@ public interface IOrderServicePort {
     void updateOrderDelivered(Long id, StatusEnum status, String codeOrder);
 
     List<Order> getOrders(String status, Long idRestaurant, int page, int pageSize);
+
+    void updateOrderCanceled(Long id, StatusEnum status);
+
 }
 

@@ -108,6 +108,31 @@ public class OrderUseCase implements IOrderServicePort {
         return orderPersistencePort.getOrders(status, idRestaurant, page, pageSize);
     }
 
+    @Override
+    public void updateOrderCanceled(Long id, StatusEnum status) {
+        String s = status.toString();
+        OrderEntity orderEntityCanceled = orderRepository.findByIdAndStatus(id,s).orElseThrow(OrderNotFoundException::new);
+
+        if(orderEntityCanceled.getStatus().contains(StatusEnum.EN_PREPARACION.toString())
+            || orderEntityCanceled.getStatus().contains(StatusEnum.LISTO.toString())
+            || orderEntityCanceled.getStatus().contains(StatusEnum.ENTREGADO.toString())){
+
+            Long idClient = orderEntityCanceled.getIdClient();
+            User user = clientHttpAdapterPersistencePort.getClient(idClient);
+            String phoneNumber = user.getPhone();
+
+            String message = "Lo sentimos, tu pedido ya está en preparación y no puede cancelarse";
+            messagingTwilioHttpAdapterPersistencePort.getMessaging(message, phoneNumber);
+
+            throw new OrderNotCanceledException();
+        }
+
+        if(orderEntityCanceled.getStatus().contains(StatusEnum.CANCELADO.toString())){
+            throw new OrderAlreadyCancelledException();
+        }
+          orderPersistencePort.updateOrderCanceled(id, status);
+    }
+
     public static String randomCharacters(Integer lenght) {
 
         String letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";

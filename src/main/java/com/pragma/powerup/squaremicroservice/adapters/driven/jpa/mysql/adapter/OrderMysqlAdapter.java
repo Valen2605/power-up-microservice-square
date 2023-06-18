@@ -82,6 +82,17 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
     }
 
     @Override
+    public void updateOrderCanceled(Long id, StatusEnum status) {
+        String s = status.toString();
+        OrderEntity orderEntityCanceled = orderRepository.findByIdAndStatus(id,s).orElseThrow(OrderNotFoundException::new);
+
+        if(orderEntityCanceled.getStatus().contains(StatusEnum.PENDIENTE.toString())){
+            orderEntityCanceled.setStatus(StatusEnum.CANCELADO.toString());
+            orderRepository.save(orderEntityCanceled);
+        }
+    }
+
+    @Override
     public List<Order> getOrders(String status, Long idRestaurant, int page, int pageSize) {
 
         PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by("status").ascending());

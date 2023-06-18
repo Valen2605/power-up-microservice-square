@@ -102,10 +102,10 @@ public class OrderRestController {
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_READY_MESSAGE));
     }
 
-    @Operation(summary = "Update Order Ready",
+    @Operation(summary = "Update Order Delivered",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Order Updated",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = DishUpdateRequestDto.class))),
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderUpdateRequestDto.class))),
                     @ApiResponse(responseCode = "404", description = "Order not found",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
             })
@@ -117,8 +117,18 @@ public class OrderRestController {
     }
 
 
-
-
-
+    @Operation(summary = "Update Order Canceled",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Order Updated",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderUpdateRequestDto.class))),
+                    @ApiResponse(responseCode = "404", description = "Order not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
+            })
+    @PatchMapping("/orderCanceled/{id}/{status}")
+    public ResponseEntity<Map<String, String>> updateOrderCanceled(@PathVariable Long id, StatusEnum status) {
+        orderHandler.updateOrderCanceled(id,status);
+        return ResponseEntity.ok()
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_CANCELED_MESSAGE));
+    }
 
 }

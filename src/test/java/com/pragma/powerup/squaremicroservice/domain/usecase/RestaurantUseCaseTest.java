@@ -4,6 +4,7 @@ import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.Re
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IEmployeeRepository;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.request.EmployeeRequestDto;
+import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotBeAEmployeeException;
 import com.pragma.powerup.squaremicroservice.domain.exceptions.UserNotBeAOwnerException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IRestaurantRepository;
 import com.pragma.powerup.squaremicroservice.adapters.driving.http.adapter.EmployeeHttpAdapter;
@@ -210,9 +211,6 @@ class RestaurantUseCaseTest {
         verify(employeeHttpAdapterPersistencePort, times(1)).getEmployee(idEmployee);
         verify(employeePersistencePort, times(1)).addEmployee(employee);
 
-
     }
-
-
 
 }

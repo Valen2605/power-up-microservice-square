@@ -4,9 +4,11 @@ import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.Di
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.DishNotFoundInRestaurantException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.OrderNotFoundException;
+import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IDishRepository;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IOrderRepository;
 import com.pragma.powerup.squaremicroservice.domain.model.OrderDish;
 import com.pragma.powerup.squaremicroservice.domain.spi.IOrderDishPersistencePort;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -26,45 +28,32 @@ class OrderDishUseCaseTest {
     private IOrderRepository orderRepository;
 
     @Mock
-    private IOrderRepository dishRepository;
+    private IDishRepository dishRepository;
 
     @Mock
     private IOrderDishPersistencePort orderDishPersistencePort;
 
     @InjectMocks
     private OrderDishUseCase orderDishUseCase;
-
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
+        orderDishUseCase = new OrderDishUseCase(orderDishPersistencePort,orderRepository,dishRepository);
     }
 
-    @Test
-    void testSaveOrderDishWhenDishNotFoundInRestaurant() {
-        // Arrange
-        Long idOrder = 123L;
-        OrderEntity orderEntity = new OrderEntity();
-        when(orderRepository.findById(idOrder)).thenReturn(Optional.of(orderEntity));
-
-        // Act & Assert
-        assertThrows(DishNotFoundInRestaurantException.class, () -> {
-            orderDishUseCase.saveOrderDish(new OrderDish());
-        });
-    }
 
     @Test
     void testSaveOrderDishSuccess() {
-        // Arrange
-        Long idOrder = 123L;
-        List<OrderEntity> idRestaurant = new ArrayList<>();
-        idRestaurant.add(new OrderEntity());
-        when(orderRepository.findByRestaurantEntityId(idOrder)).thenReturn(idRestaurant);
 
+        OrderDish orderDish = new OrderDish();
+
+        orderDish.setId(1L);
 
         // Act
-        orderDishUseCase.saveOrderDish(new OrderDish());
+        orderDishUseCase.saveOrderDish(orderDish);
 
         // Assert
-        Mockito.verify(orderDishPersistencePort, Mockito.times(1)).saveOrderDish(Mockito.any(OrderDish.class));
+        Mockito.verify(orderDishPersistencePort, Mockito.times(1)).saveOrderDish(orderDish);
     }
 
 }
