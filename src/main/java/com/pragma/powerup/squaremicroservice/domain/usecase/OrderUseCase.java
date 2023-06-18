@@ -1,7 +1,6 @@
 package com.pragma.powerup.squaremicroservice.domain.usecase;
 
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
-import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.OrderInProcessException;
 import com.pragma.powerup.squaremicroservice.domain.exceptions.*;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.OrderNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IEmployeeRepository;
