@@ -23,6 +23,9 @@ public class Interceptor implements HandlerInterceptor {
     @Setter
     private static Long idUser;
 
+    @Setter
+    private static String emailUser;
+
     @Value("${my.variables.admin}")
     String admin;
 
@@ -45,6 +48,7 @@ public class Interceptor implements HandlerInterceptor {
         DecodedJWT decodedJWT = JWT.decode(jwtToken);
         roles = decodedJWT.getClaim("roles").asList(String.class);
         idUser = decodedJWT.getClaim("user").asLong();
+        emailUser = decodedJWT.getClaim("email").asString();
         String roleUser = roles.get(0);
 
 
@@ -147,5 +151,8 @@ public class Interceptor implements HandlerInterceptor {
 
     public static Long getIdUser(){
         return idUser;
+    }
+    public static String getEmailUser(){
+        return emailUser;
     }
 }

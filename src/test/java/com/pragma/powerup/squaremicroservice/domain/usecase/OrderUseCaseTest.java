@@ -9,10 +9,7 @@ import com.pragma.powerup.squaremicroservice.domain.exceptions.*;
 import com.pragma.powerup.squaremicroservice.domain.model.Order;
 import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
 import com.pragma.powerup.squaremicroservice.domain.model.User;
-import com.pragma.powerup.squaremicroservice.domain.spi.IClientHttpAdapterPersistencePort;
-import com.pragma.powerup.squaremicroservice.domain.spi.IMessagingTwilioHttpAdapterPersistencePort;
-import com.pragma.powerup.squaremicroservice.domain.spi.IOrderPersistencePort;
-import com.pragma.powerup.squaremicroservice.domain.spi.IRestaurantPersistencePort;
+import com.pragma.powerup.squaremicroservice.domain.spi.*;
 import com.pragma.powerup.squaremicroservice.domain.utility.StatusEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,9 +22,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -55,13 +50,16 @@ class OrderUseCaseTest {
     private IMessagingTwilioHttpAdapterPersistencePort messagingTwilioHttpAdapterPersistencePort;
 
     @Mock
+    private ITraceabilityHttpAdapterPersistencePort traceabilityHttpAdapterPersistencePort;
+
+    @Mock
     private RestTemplate restTemplate;
 
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        orderUseCase = new OrderUseCase(orderRepository, orderPersistencePort, restaurantPersistencePort, employeeRepository, clientHttpAdapterPersistencePort, messagingTwilioHttpAdapterPersistencePort);
+        orderUseCase = new OrderUseCase(orderRepository, orderPersistencePort, restaurantPersistencePort, employeeRepository, clientHttpAdapterPersistencePort, messagingTwilioHttpAdapterPersistencePort, traceabilityHttpAdapterPersistencePort);
         restTemplate = new RestTemplate();
     }
 
