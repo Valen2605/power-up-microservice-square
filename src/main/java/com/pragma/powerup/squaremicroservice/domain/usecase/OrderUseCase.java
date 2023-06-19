@@ -1,6 +1,7 @@
 package com.pragma.powerup.squaremicroservice.domain.usecase;
 
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
+import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.request.TraceabilityRequestDto;
 import com.pragma.powerup.squaremicroservice.domain.exceptions.*;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.OrderNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IEmployeeRepository;
@@ -12,15 +13,14 @@ import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
 
 
 import com.pragma.powerup.squaremicroservice.domain.model.User;
-import com.pragma.powerup.squaremicroservice.domain.spi.IClientHttpAdapterPersistencePort;
-import com.pragma.powerup.squaremicroservice.domain.spi.IMessagingTwilioHttpAdapterPersistencePort;
-import com.pragma.powerup.squaremicroservice.domain.spi.IOrderPersistencePort;
-import com.pragma.powerup.squaremicroservice.domain.spi.IRestaurantPersistencePort;
+import com.pragma.powerup.squaremicroservice.domain.spi.*;
 import com.pragma.powerup.squaremicroservice.domain.utility.StatusEnum;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -33,15 +33,18 @@ public class OrderUseCase implements IOrderServicePort {
     private final IClientHttpAdapterPersistencePort clientHttpAdapterPersistencePort;
     private final IMessagingTwilioHttpAdapterPersistencePort messagingTwilioHttpAdapterPersistencePort;
 
+    private final ITraceabilityHttpAdapterPersistencePort traceabilityHttpAdapterPersistencePort;
 
 
-    public OrderUseCase(IOrderRepository orderRepository, IOrderPersistencePort orderPersistencePort, IRestaurantPersistencePort restaurantPersistencePort, IEmployeeRepository employeeRepository, IClientHttpAdapterPersistencePort clientHttpAdapterPersistencePort, IMessagingTwilioHttpAdapterPersistencePort messagingTwilioHttpAdapterPersistencePort) {
+
+    public OrderUseCase(IOrderRepository orderRepository, IOrderPersistencePort orderPersistencePort, IRestaurantPersistencePort restaurantPersistencePort, IEmployeeRepository employeeRepository, IClientHttpAdapterPersistencePort clientHttpAdapterPersistencePort, IMessagingTwilioHttpAdapterPersistencePort messagingTwilioHttpAdapterPersistencePort, ITraceabilityHttpAdapterPersistencePort traceabilityHttpAdapterPersistencePort) {
         this.orderRepository = orderRepository;
         this.orderPersistencePort = orderPersistencePort;
         this.restaurantPersistencePort = restaurantPersistencePort;
         this.employeeRepository = employeeRepository;
         this.clientHttpAdapterPersistencePort = clientHttpAdapterPersistencePort;
         this.messagingTwilioHttpAdapterPersistencePort = messagingTwilioHttpAdapterPersistencePort;
+        this.traceabilityHttpAdapterPersistencePort = traceabilityHttpAdapterPersistencePort;
     }
 
 
@@ -54,7 +57,6 @@ public class OrderUseCase implements IOrderServicePort {
         order.setRestaurant(restaurant);
         order.setStatus(StatusEnum.PENDIENTE.toString());
         orderPersistencePort.saveOrder(order);
-
     }
 
     @Override

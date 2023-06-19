@@ -24,6 +24,7 @@ my:
     employee: "ROLE_EMPLOYEE"
     client: "ROLE_CUSTOMER"
     uri: "http://localhost:8092/messaging/sendMessage/"
+    urltrace: "http://localhost:8093/traceability/createTraceability"
 
 
 

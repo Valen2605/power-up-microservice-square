@@ -8,6 +8,9 @@ import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exception
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.mappers.IOrderEntityMapper;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IOrderRepository;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IRestaurantRepository;
+import com.pragma.powerup.squaremicroservice.adapters.driving.http.adapter.TraceabilityHttpAdapter;
+import com.pragma.powerup.squaremicroservice.adapters.driving.http.dto.request.TraceabilityRequestDto;
+import com.pragma.powerup.squaremicroservice.configuration.security.Interceptor;
 import com.pragma.powerup.squaremicroservice.domain.model.Order;
 import com.pragma.powerup.squaremicroservice.domain.spi.IOrderPersistencePort;
 import com.pragma.powerup.squaremicroservice.domain.utility.StatusEnum;
@@ -17,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,7 +56,6 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
             }
 
         }
-
            orderRepository.save(orderEntityMapper.toEntity(order));
 
     }
