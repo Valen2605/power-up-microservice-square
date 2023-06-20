@@ -172,7 +172,19 @@ public class OrderUseCase implements IOrderServicePort {
         if(orderEntityCanceled.getStatus().contains(StatusEnum.CANCELADO.toString())){
             throw new OrderAlreadyCancelledException();
         }
-          orderPersistencePort.updateOrderCanceled(id, status);
+
+        TraceabilityRequestDto traceabilityRequestDto = new TraceabilityRequestDto();
+        traceabilityRequestDto.setIdOrder(orderEntityCanceled.getId().toString());
+        traceabilityRequestDto.setIdClient(orderEntityCanceled.getIdClient().toString());
+        traceabilityRequestDto.setEmailClient(Interceptor.getEmailUser());
+        traceabilityRequestDto.setDate(LocalDateTime.now());
+        traceabilityRequestDto.setPreviousStatus(orderEntityCanceled.getStatus());
+        traceabilityRequestDto.setNewStatus(StatusEnum.CANCELADO.toString());
+        traceabilityRequestDto.setIdEmployee(Interceptor.getIdUser().toString());
+        traceabilityRequestDto.setEmailEmployee(Interceptor.getEmailUser());
+        traceabilityHttpAdapterPersistencePort.getTraceability(traceabilityRequestDto);
+
+        orderPersistencePort.updateOrderCanceled(id, status);
     }
 
     public static String randomCharacters(Integer lenght) {
