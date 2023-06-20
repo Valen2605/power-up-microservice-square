@@ -104,6 +104,18 @@ public class OrderUseCase implements IOrderServicePort {
 
         String message = "Estimado cliente su pedido está listo su código es " + str;
         messagingTwilioHttpAdapterPersistencePort.getMessaging(message, phoneNumber);
+
+        TraceabilityRequestDto traceabilityRequestDto = new TraceabilityRequestDto();
+        traceabilityRequestDto.setIdOrder(orderEntityReady.getId().toString());
+        traceabilityRequestDto.setIdClient(orderEntityReady.getIdClient().toString());
+        traceabilityRequestDto.setEmailClient(Interceptor.getEmailUser());
+        traceabilityRequestDto.setDate(LocalDateTime.now());
+        traceabilityRequestDto.setPreviousStatus(orderEntityReady.getStatus());
+        traceabilityRequestDto.setNewStatus(StatusEnum.LISTO.toString());
+        traceabilityRequestDto.setIdEmployee(Interceptor.getIdUser().toString());
+        traceabilityRequestDto.setEmailEmployee(Interceptor.getEmailUser());
+        traceabilityHttpAdapterPersistencePort.getTraceability(traceabilityRequestDto);
+
         orderPersistencePort.updateOrderReady(id, status);
     }
 
@@ -118,6 +130,17 @@ public class OrderUseCase implements IOrderServicePort {
         if(!orderEntityDelivered.getCodeOrder().equals(codeOrder)){
             throw new IncorrectCodeException();
         }
+
+        TraceabilityRequestDto traceabilityRequestDto = new TraceabilityRequestDto();
+        traceabilityRequestDto.setIdOrder(orderEntityDelivered.getId().toString());
+        traceabilityRequestDto.setIdClient(orderEntityDelivered.getIdClient().toString());
+        traceabilityRequestDto.setEmailClient(Interceptor.getEmailUser());
+        traceabilityRequestDto.setDate(LocalDateTime.now());
+        traceabilityRequestDto.setPreviousStatus(orderEntityDelivered.getStatus());
+        traceabilityRequestDto.setNewStatus(StatusEnum.ENTREGADO.toString());
+        traceabilityRequestDto.setIdEmployee(Interceptor.getIdUser().toString());
+        traceabilityRequestDto.setEmailEmployee(Interceptor.getEmailUser());
+        traceabilityHttpAdapterPersistencePort.getTraceability(traceabilityRequestDto);
 
         orderPersistencePort.updateOrderDelivered(id, status);
     }
