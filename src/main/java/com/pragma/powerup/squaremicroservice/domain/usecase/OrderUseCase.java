@@ -66,6 +66,23 @@ public class OrderUseCase implements IOrderServicePort {
             throw new UserNotBeAEmployeeException();
         }
 
+        Optional<OrderEntity> idOrder = orderRepository.findByIdAndStatus(id, StatusEnum.PENDIENTE.toString());
+
+        if(!orderRepository.findByIdAndStatus(id, StatusEnum.PENDIENTE.toString()).isPresent()){
+            throw new OrderNotFoundException();
+        }
+
+        TraceabilityRequestDto traceabilityRequestDto = new TraceabilityRequestDto();
+        traceabilityRequestDto.setIdOrder(idOrder.get().getId().toString());
+        traceabilityRequestDto.setIdClient(idOrder.get().getIdClient().toString());
+        traceabilityRequestDto.setEmailClient(Interceptor.getEmailUser());
+        traceabilityRequestDto.setDate(LocalDateTime.now());
+        traceabilityRequestDto.setPreviousStatus(idOrder.get().getStatus());
+        traceabilityRequestDto.setNewStatus(StatusEnum.EN_PREPARACION.toString());
+        traceabilityRequestDto.setIdEmployee(Interceptor.getIdUser().toString());
+        traceabilityRequestDto.setEmailEmployee(Interceptor.getEmailUser());
+        traceabilityHttpAdapterPersistencePort.getTraceability(traceabilityRequestDto);
+
         orderPersistencePort.assignOrder(id, order);
     }
 
