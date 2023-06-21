@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.internal.stubbing.answers.DoesNothing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -188,6 +189,7 @@ class DishUseCaseTest {
     void enableDisableDishInvalidId() {
         // Arrange
         Long id = 1L;
+        doNothing().when(dishPersistencePort).enableDisableDish(id);
         when(dishRepository.findById(id)).thenReturn(Optional.empty());
 
         // Act and Assert
@@ -196,7 +198,6 @@ class DishUseCaseTest {
         });
         verify(dishRepository).findById(id);
         verifyNoMoreInteractions(dishRepository);
-        verify(dishPersistencePort);
     }
 
     @Test
