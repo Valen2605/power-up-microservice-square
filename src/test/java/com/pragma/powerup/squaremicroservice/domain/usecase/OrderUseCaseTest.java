@@ -2,9 +2,11 @@ package com.pragma.powerup.squaremicroservice.domain.usecase;
 
 
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
+import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.exceptions.OrderNotFoundException;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IEmployeeRepository;
 import com.pragma.powerup.squaremicroservice.adapters.driven.jpa.mysql.repositories.IOrderRepository;
+import com.pragma.powerup.squaremicroservice.configuration.security.Interceptor;
 import com.pragma.powerup.squaremicroservice.domain.exceptions.*;
 import com.pragma.powerup.squaremicroservice.domain.model.Order;
 import com.pragma.powerup.squaremicroservice.domain.model.Restaurant;
@@ -112,9 +114,19 @@ class OrderUseCaseTest {
         // Arrange
         Long id = 1L;
         Order order = new Order();
-        order.setIdChef(2L);
+        Long chefId = 456L;
+        Long clientId = 789L;
+        Interceptor.setIdUser(456L);
+
+        StatusEnum status = StatusEnum.PENDIENTE;
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setId(id);
+        orderEntity.setIdChef(chefId);
+        orderEntity.setIdClient(clientId);
+        orderEntity.setStatus(StatusEnum.PENDIENTE.toString());
 
         when(employeeRepository.existsByIdEmployee(order.getIdChef())).thenReturn(true);
+        when(orderRepository.findByIdAndStatus(id, status.toString())).thenReturn(Optional.of(orderEntity));
 
         // Act
         orderUseCase.assignOrder(id, order);
@@ -134,6 +146,7 @@ class OrderUseCaseTest {
         orderEntity.setId(id);
         orderEntity.setStatus(status.toString());
         orderEntity.setIdClient(2L);
+        Interceptor.setIdUser(456L);
 
         User user = new User();
         user.setPhone("1234567890");
@@ -153,25 +166,32 @@ class OrderUseCaseTest {
 
 
     @Test
-    void testUpdateOrderDeliveredValidData() {
+    void testSaveOrderStatusDelivered() {
         // Arrange
-        Long id = 1L;
-        StatusEnum status = StatusEnum.ENTREGADO;
-        String codeOrder = "ABC123";
+        Long idRestaurant = 1L;
+        Long idClient = 2L;
+        Order order = new Order();
+        Restaurant restaurant = new Restaurant();
+        restaurant.setId(idRestaurant);
+        order.setIdClient(idClient);
+        order.setDateOrder(LocalDate.now());
+        order.setStatus(StatusEnum.ENTREGADO.toString());
+        order.setRestaurant(restaurant);
+        RestaurantEntity restaurantEntity = new RestaurantEntity();
+        restaurantEntity.setId(idRestaurant);
+        OrderEntity orderEntity = new OrderEntity(1L,idClient,LocalDate.now(),StatusEnum.ENTREGADO.toString(),2L,restaurantEntity, "ABC1234567");
 
-        OrderEntity orderEntity = new OrderEntity();
-
-        orderEntity.setStatus(StatusEnum.LISTO.toString());
-
-        orderEntity.setCodeOrder(codeOrder);
-
-        when(orderRepository.findByIdAndStatus(id, status.toString())).thenReturn(Optional.of(orderEntity));
-
+        Interceptor.setIdUser(2L);
         // Act
-        orderUseCase.updateOrderDelivered(id, status, codeOrder);
+        doNothing().when(orderPersistencePort).updateOrderDelivered(orderEntity.getId(),StatusEnum.ENTREGADO);
+
 
         // Assert
-        verify(orderPersistencePort, times(1)).updateOrderDelivered(id, status);
+        assertEquals(idClient, order.getIdClient());
+        assertEquals(LocalDate.now(), order.getDateOrder());
+        assertEquals(StatusEnum.ENTREGADO.toString(), order.getStatus());
+        assertEquals(restaurant, order.getRestaurant());
+        verify(orderPersistencePort, times(0)).updateOrderDelivered(orderEntity.getId(),StatusEnum.ENTREGADO);
     }
 
     @Test
@@ -284,22 +304,36 @@ class OrderUseCaseTest {
     }
 
     @Test
-    void updateOrderCanceledwhenOrderCanBeCancelled() {
+    void testSaveOrderStatusCancelled() {
         // Arrange
-        Long orderId = 1L;
-        StatusEnum status = StatusEnum.CANCELADO;
-        OrderEntity orderEntity = new OrderEntity();
-        orderEntity.setStatus(StatusEnum.PENDIENTE.toString());
+        Long idRestaurant = 1L;
+        Long idClient = 2L;
+        Order order = new Order();
+        Restaurant restaurant = new Restaurant();
+        restaurant.setId(idRestaurant);
+        order.setIdClient(idClient);
+        order.setDateOrder(LocalDate.now());
+        order.setStatus(StatusEnum.PENDIENTE.toString());
+        order.setRestaurant(restaurant);
+        RestaurantEntity restaurantEntity = new RestaurantEntity();
+        restaurantEntity.setId(idRestaurant);
+        OrderEntity orderEntity = new OrderEntity(1L,idClient,LocalDate.now(),StatusEnum.CANCELADO.toString(),2L,restaurantEntity,"ABC1234567");
 
-        when(orderRepository.findByIdAndStatus(anyLong(), anyString()))
-                .thenReturn(Optional.of(orderEntity));
-
+        when(restaurantPersistencePort.findById(idRestaurant)).thenReturn(restaurant);
+        doNothing().when(orderPersistencePort).updateOrderCanceled(orderEntity.getId(), StatusEnum.CANCELADO);
+        Interceptor.setIdUser(2L);
         // Act
-        orderUseCase.updateOrderCanceled(orderId, status);
+        orderUseCase.saveOrder(idRestaurant);
+
 
         // Assert
-        verify(orderPersistencePort,times(1)).updateOrderCanceled(orderId,status);
-        assertEquals(orderEntity.getStatus().toString(),"PENDIENTE");
+        verify(restaurantPersistencePort, times(1)).findById(idRestaurant);
+        assertEquals(idClient, order.getIdClient());
+        assertEquals(LocalDate.now(), order.getDateOrder());
+        assertEquals(StatusEnum.PENDIENTE.toString(), order.getStatus());
+        assertEquals(restaurant, order.getRestaurant());
+        verify(orderPersistencePort, times(0)).updateOrderCanceled(orderEntity.getId(), StatusEnum.CANCELADO);
     }
+
 
 }
