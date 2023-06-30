@@ -47,7 +47,7 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
 
            if(orderEntity.get().getStatus().equals(StatusEnum.ENTREGADO.name())
                 || orderEntity.get().getStatus().equals(StatusEnum.CANCELADO.name())){
-                orderRepository.save(orderEntityMapper.toEntity(order));
+                 orderRepository.save(orderEntityMapper.toEntity(order));
             }
             if(orderEntity.get().getStatus().equals(StatusEnum.PENDIENTE.name())
                     || orderEntity.get().getStatus().equals(StatusEnum.EN_PREPARACION.name())
