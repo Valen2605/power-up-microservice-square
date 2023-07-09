@@ -28,6 +28,4 @@ public class DishEntity {
     private RestaurantEntity restaurantEntity;
     private String urlImage;
     private Boolean active;
-    private Integer priority;
-
 }

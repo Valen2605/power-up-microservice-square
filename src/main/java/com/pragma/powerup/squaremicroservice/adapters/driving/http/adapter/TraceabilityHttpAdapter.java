@@ -10,11 +10,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDateTime;
+
 
 public class TraceabilityHttpAdapter implements ITraceabilityHttpAdapterPersistencePort {
     private RestTemplate restTemplate = new RestTemplate();

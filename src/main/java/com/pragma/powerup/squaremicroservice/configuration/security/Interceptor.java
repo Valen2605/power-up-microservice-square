@@ -115,6 +115,10 @@ public class Interceptor implements HandlerInterceptor {
         if(requestURI.startsWith("/order/orderDelivered/")) {
             return true;
         }
+
+        if(requestURI.startsWith("/takeOrder")) {
+            return true;
+        }
         return false;
     }
 
@@ -139,6 +143,15 @@ public class Interceptor implements HandlerInterceptor {
         if(requestURI.startsWith("/order/orderCanceled/")){
             return true;
         }
+
+        if(requestURI.startsWith("/addOrder")){
+            return true;
+        }
+
+        if(requestURI.startsWith("/addOrders")){
+            return true;
+        }
+
         return false;
 
 

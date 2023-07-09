@@ -129,7 +129,7 @@ public class ControllerAdvisor {
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, PAGE_NOT_FOUND));
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
+   @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> IllegalArgumentException() {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, INCORRECT_VALUE));

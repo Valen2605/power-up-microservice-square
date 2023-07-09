@@ -27,6 +27,9 @@ public class BeanConfiguration {
     private final IDishRepository dishRepository;
     private final IDishEntityMapper dishEntityMapper;
 
+    private final IDishOrderRepository dishOrderRepository;
+    private final IDishOrderEntityMapper dishOrderEntityMapper;
+
     private final ICategoryRepository categoryRepository;
     private final ICategoryEntityMapper categoryEntityMapper;
 
@@ -73,6 +76,11 @@ public class BeanConfiguration {
     }
 
     @Bean
+    public IDishOrderServicePort dishOrderServicePort() {
+        return new DishOrderUseCase(dishOrderPersistencePort(), dishOrderRepository);
+    }
+
+    @Bean
     public IRestaurantPersistencePort restaurantPersistencePort() {
         return new RestaurantMysqlAdapter(restaurantRepository, restaurantEntityMapper);
     }
@@ -80,7 +88,10 @@ public class BeanConfiguration {
     public IDishPersistencePort dishPersistencePort() {
         return new DishMysqlAdapter(dishRepository, dishEntityMapper);
     }
-
+    @Bean
+    public IDishOrderPersistencePort dishOrderPersistencePort() {
+        return new DishOrderMysqlAdapter(dishOrderRepository, dishOrderEntityMapper);
+    }
     @Bean
     public ICategoryServicePort categoryServicePort() {
         return new CategoryUseCase(categoryPersistencePort());
